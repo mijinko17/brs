@@ -2,7 +2,9 @@ FROM rust:1.78 AS builder
 
 WORKDIR /app
 
-COPY . .
+COPY src src
+COPY Cargo.toml .
+COPY Cargo.lock .
 RUN cargo build --release
 
 FROM debian:12.6-slim
