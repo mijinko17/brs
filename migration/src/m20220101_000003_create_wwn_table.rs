@@ -22,6 +22,7 @@ impl MigrationTrait for Migration {
                             .primary_key(),
                     )
                     .col(ColumnDef::new(Wwn::Value).string().not_null())
+                    .col(ColumnDef::new(Wwn::ZoneId).integer().not_null())
                     .to_owned(),
             )
             .await
@@ -42,4 +43,5 @@ enum Wwn {
     Table,
     Id,
     Value,
+    ZoneId,
 }

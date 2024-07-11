@@ -8,9 +8,17 @@ pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
     pub value: String,
+    pub zone_id: i32,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {}
+pub enum Relation {
+    #[sea_orm(
+        belongs_to = "crate::zone::Entity",
+        from = "crate::wwn::Column::ZoneId"
+        to = "crate::zone::Column::Id",
+    )]
+    Zone,
+}
 
 impl ActiveModelBehavior for ActiveModel {}
