@@ -18,6 +18,8 @@ RUN echo proxy_cert/certificate.cer >> /etc/ca-certificates.conf && \
 RUN cargo build --release
 
 FROM debian:12.6-slim
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends curl sqlite3
 WORKDIR /app
 COPY --from=builder /app/target/release/brocade-rest-simulator .
 COPY ./self_signed_certs/* self_signed_certs/

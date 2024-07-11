@@ -9,4 +9,6 @@ docker build -t mijinko17/brocade-rest-server:develop \
     --build-arg HTTPS_PROXY=$HTTPS_PROXY \
     --network host .
 
+docker rm -f brocade-rest-simulator
+
 docker run -d -p 443:443 --name brocade-rest-simulator mijinko17/brocade-rest-server:develop
