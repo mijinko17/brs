@@ -6,8 +6,8 @@ COPY src src
 COPY Cargo.toml .
 COPY Cargo.lock .
 
-COPY proxy_cert/certificate.cer /usr/share/ca-certificates/proxy-cert/certificate.cer
-RUN echo proxy-cert/certificate.cer >> /etc/ca-certificates.conf && \
+COPY proxy_cert/certificate.cer /usr/share/ca-certificates/proxy_cert/certificate.cer
+RUN echo proxy_cert/certificate.cer >> /etc/ca-certificates.conf && \
   update-ca-certificates
 
 RUN cargo build --release
