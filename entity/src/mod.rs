@@ -3,6 +3,6 @@
 pub mod prelude;
 
 pub mod post;
-pub mod zone;
 pub mod wwn;
+pub mod zone;
 pub mod zone_configuration;
