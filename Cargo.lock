@@ -555,12 +555,9 @@ name = "brocade-rest-simulator"
 version = "0.1.0"
 dependencies = [
  "api",
- "axum",
- "axum-server",
  "entity",
  "futures",
  "sea-orm",
- "tokio",
 ]
 
 [[package]]

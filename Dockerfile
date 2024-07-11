@@ -6,7 +6,7 @@ COPY . .
 RUN cargo chef prepare --recipe-path recipe.json
 
 FROM chef AS builder 
-COPY proxy_cert/certificate.cer /usr/share/ca-certificates/proxy_cert/certificate.cer
+COPY docker_files/proxy_cert/certificate.cer /usr/share/ca-certificates/proxy_cert/certificate.cer
 RUN echo proxy_cert/certificate.cer >> /etc/ca-certificates.conf && \
   update-ca-certificates
 RUN apt-get update
@@ -21,5 +21,5 @@ RUN apt-get update
 RUN apt-get install -y --no-install-recommends curl sqlite3
 WORKDIR /app
 COPY --from=builder /app/target/release/brocade-rest-simulator .
-COPY ./self_signed_certs/* self_signed_certs/
+COPY docker_files/self_signed_certs/* self_signed_certs/
 ENTRYPOINT ["./brocade-rest-simulator"]
