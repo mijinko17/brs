@@ -1,3 +1,4 @@
+use entity::repository::ZoneRepositoryImpl;
 use futures::executor::block_on;
 use sea_orm::{ActiveModelTrait, ActiveValue, Database, DbErr, EntityTrait, InsertResult};
 
@@ -21,9 +22,13 @@ async fn run() -> Result<(), DbErr> {
     Ok(())
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     // if let Err(err) = block_on(run()) {
-        // panic!("{}", err);
+    // panic!("{}", err);
     // }
-    api::start()
+    // api::start()
+    println!("{:?}", ZoneRepositoryImpl.add_zone("hogehoge").await);
+    println!("{:?}", ZoneRepositoryImpl.add_zone("fugafuga").await);
+    println!("{:?}", ZoneRepositoryImpl.zones().await);
 }

@@ -558,6 +558,7 @@ dependencies = [
  "entity",
  "futures",
  "sea-orm",
+ "tokio",
 ]
 
 [[package]]
