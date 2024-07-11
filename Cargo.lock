@@ -127,6 +127,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "api"
+version = "0.1.0"
+dependencies = [
+ "axum",
+ "axum-server",
+ "tokio",
+]
+
+[[package]]
 name = "arc-swap"
 version = "1.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -545,8 +554,10 @@ dependencies = [
 name = "brocade-rest-simulator"
 version = "0.1.0"
 dependencies = [
+ "api",
  "axum",
  "axum-server",
+ "entity",
  "futures",
  "sea-orm",
  "tokio",
@@ -806,6 +817,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "60b1af1c220855b6ceac025d3f6ecdd2b7c4894bfe9cd9bda4fbb4bc7c0d4cf0"
 dependencies = [
  "serde",
+]
+
+[[package]]
+name = "entity"
+version = "0.1.0"
+dependencies = [
+ "sea-orm",
 ]
 
 [[package]]

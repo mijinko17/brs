@@ -6,15 +6,14 @@ COPY . .
 RUN cargo chef prepare --recipe-path recipe.json
 
 FROM chef AS builder 
-COPY --from=planner /app/recipe.json recipe.json
 COPY proxy_cert/certificate.cer /usr/share/ca-certificates/proxy_cert/certificate.cer
 RUN echo proxy_cert/certificate.cer >> /etc/ca-certificates.conf && \
   update-ca-certificates
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends libssl-dev pkg-config
+COPY --from=planner /app/recipe.json recipe.json
 RUN cargo chef cook --release --recipe-path recipe.json
 COPY . .
-COPY proxy_cert/certificate.cer /usr/share/ca-certificates/proxy_cert/certificate.cer
-RUN echo proxy_cert/certificate.cer >> /etc/ca-certificates.conf && \
-  update-ca-certificates
 RUN cargo build --release
 
 FROM debian:12.6-slim

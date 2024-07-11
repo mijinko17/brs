@@ -1,2 +1,3 @@
 target
 /proxy_cert/*.cer
+.db
