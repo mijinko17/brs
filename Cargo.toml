@@ -15,4 +15,4 @@ entity = { path = "./entity" }
 api = { path = "api" }
 
 [workspace]
-members = [".", "api", "entity", "migration"]
+members = [".", "api", "entity", "migration", "usecase"]
