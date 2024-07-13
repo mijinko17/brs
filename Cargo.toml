@@ -11,9 +11,8 @@ sea-orm = { version = "0.12.15", features = [
     "runtime-async-std-native-tls",
     "macros",
 ] }
-entity = { path = "./entity" }
 api = { path = "./api" }
-migration = { path = "./migration" }
+infra = { path = "./infra" }
 
 [workspace]
-members = [".", "api", "controller", "entity", "infra", "injection", "migration", "usecase", "util"]
+members = [".", "api", "controller", "infra", "injection", "usecase", "util"]
