@@ -557,8 +557,10 @@ dependencies = [
  "api",
  "entity",
  "futures",
+ "infra",
  "sea-orm",
  "tokio",
+ "usecase",
 ]
 
 [[package]]
@@ -1342,6 +1344,14 @@ checksum = "168fb715dda47215e360912c096649d23d58bf392ac62f73919e831745e40f26"
 dependencies = [
  "equivalent",
  "hashbrown 0.14.5",
+]
+
+[[package]]
+name = "infra"
+version = "0.1.0"
+dependencies = [
+ "sea-orm",
+ "usecase",
 ]
 
 [[package]]
