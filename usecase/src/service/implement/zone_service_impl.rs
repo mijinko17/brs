@@ -1,6 +1,5 @@
 use std::vec;
-
-use axum::async_trait;
+use util::async_trait;
 
 use crate::{
     entity::{wwn::Wwn, zone::Zone},

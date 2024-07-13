@@ -1,4 +1,4 @@
-use axum::async_trait;
+use util::async_trait;
 
 use crate::entity::zone::Zone;
 

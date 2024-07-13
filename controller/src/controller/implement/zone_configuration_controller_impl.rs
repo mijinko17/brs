@@ -1,5 +1,5 @@
-use axum::async_trait;
 use usecase::service::interface::zone_service::ZoneService;
+use util::async_trait;
 
 use crate::{
     controller::interface::zone_configuratin_controller::ZoneConfigurationController,

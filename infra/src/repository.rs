@@ -1,8 +1,8 @@
-use axum::async_trait;
 use sea_orm::{ActiveModelTrait, ActiveValue, EntityTrait};
 use sea_orm::{Database, DbErr};
 use usecase::entity::zone::Zone;
 use usecase::repository::zone_repository::ZoneRepository;
+use util::async_trait;
 
 const DATABASE_URL: &str = "sqlite:./piyo.db?mode=rwc";
 

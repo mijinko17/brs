@@ -1,4 +1,4 @@
-use axum::async_trait;
+use util::async_trait;
 
 use crate::{
     input::{create_zone_input::CreateZoneInput, create_zones_input::CreateZonesInput},

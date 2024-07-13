@@ -1,12 +1,11 @@
-use std::{env::current_dir, future::IntoFuture, net::SocketAddr, vec};
-
-use axum::{async_trait, debug_handler, http::StatusCode, response::Html, routing::get, Json, Router};
+use axum::{http::StatusCode, response::Html, routing::get, Json, Router};
 use axum_server::tls_rustls::RustlsConfig;
 use controller::{
     controller::interface::zone_configuratin_controller::ZoneConfigurationController,
     response::zone_response::ZoneResponse,
 };
 use injection::zone_configuratin_controller;
+use std::{env::current_dir, net::SocketAddr};
 // use injection::zone_configuratin_controller;
 pub mod handler;
 

@@ -135,6 +135,7 @@ dependencies = [
  "controller",
  "injection",
  "tokio",
+ "util",
 ]
 
 [[package]]
@@ -712,10 +713,10 @@ checksum = "c2459377285ad874054d797f3ccebf984978aa39129f6eafde5cdc8315b612f8"
 name = "controller"
 version = "0.1.0"
 dependencies = [
- "axum",
  "serde",
  "serde_json",
  "usecase",
+ "util",
 ]
 
 [[package]]
@@ -1373,9 +1374,9 @@ dependencies = [
 name = "infra"
 version = "0.1.0"
 dependencies = [
- "axum",
  "sea-orm",
  "usecase",
+ "util",
 ]
 
 [[package]]
@@ -1396,6 +1397,7 @@ dependencies = [
  "controller",
  "infra",
  "usecase",
+ "util",
 ]
 
 [[package]]
@@ -3270,7 +3272,7 @@ checksum = "daf8dba3b7eb870caf1ddeed7bc9d2a049f3cfdfae7cb521b087cc33ae4c49da"
 name = "usecase"
 version = "0.1.0"
 dependencies = [
- "axum",
+ "util",
 ]
 
 [[package]]
@@ -3278,6 +3280,13 @@ name = "utf8parse"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "06abde3611657adf66d383f00b093d7faecc7fa57071cce2578660c9f1010821"
+
+[[package]]
+name = "util"
+version = "0.1.0"
+dependencies = [
+ "axum",
+]
 
 [[package]]
 name = "uuid"

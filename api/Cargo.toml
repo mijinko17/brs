@@ -9,3 +9,4 @@ tokio = { version = "1.38.0", features = ["full"] }
 axum-server = { version = "0.6", features = ["tls-rustls"] }
 controller = { path = "../controller" }
 injection = { path = "../injection" }
+util = { path = "../util" }
