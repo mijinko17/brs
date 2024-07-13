@@ -1,6 +1,9 @@
+use std::vec;
+
 use crate::{
     entity::{wwn::Wwn, zone::Zone},
     input::create_zones_input::CreateZonesInput,
+    output::zone_output::ZoneOutput,
     repository::zone_repository::ZoneRepository,
     service::interface::zone_service::ZoneService,
 };
@@ -12,11 +15,20 @@ where
     repository: T,
 }
 
+impl<T> ZoneServiceImpl<T>
+where
+    T: ZoneRepository,
+{
+    pub fn new(repository: T) -> Self {
+        Self { repository }
+    }
+}
+
 impl<T> ZoneService for ZoneServiceImpl<T>
 where
     T: ZoneRepository,
 {
-    fn create_zones(&self, input: CreateZonesInput) {
+    async fn create_zones(&self, input: CreateZonesInput) {
         let zones = input
             .zone_inputs
             .into_iter()
@@ -31,6 +43,15 @@ where
                 )
             })
             .collect();
-        self.repository.save(zones);
+        self.repository.save(zones).await;
+    }
+
+    async fn zones(&self) -> Vec<crate::output::zone_output::ZoneOutput> {
+        self.repository
+            .zones()
+            .await
+            .into_iter()
+            .map(|zone| ZoneOutput::new(zone.name(), vec![]))
+            .collect()
     }
 }

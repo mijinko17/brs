@@ -1,6 +1,6 @@
 use crate::entity::zone::Zone;
 
 pub trait ZoneRepository {
-    fn save(&self, zones: Vec<Zone>);
-    fn zones() -> Vec<Zone>;
+    async fn save(&self, zones: Vec<Zone>);
+    async fn zones(&self) -> Vec<Zone>;
 }
