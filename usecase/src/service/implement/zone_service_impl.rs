@@ -4,7 +4,7 @@ use util::async_trait;
 use crate::{
     entity::{wwn::Wwn, zone::Zone},
     input::create_zones_input::CreateZonesInput,
-    output::zone_output::ZoneOutput,
+    output::{zone_configuration_output::ZoneConfigurationOutput, zone_output::ZoneOutput},
     repository::zone_repository::ZoneRepository,
     service::interface::zone_service::ZoneService,
 };
@@ -55,5 +55,16 @@ where
             .into_iter()
             .map(|zone| ZoneOutput::new(zone.name(), vec![]))
             .collect()
+    }
+    async fn effective_configuration(&self) -> ZoneConfigurationOutput {
+        ZoneConfigurationOutput::new(
+            "MainCfg".to_string(),
+            self.repository
+                .zones()
+                .await
+                .into_iter()
+                .map(|zone| ZoneOutput::new(zone.name(), vec![]))
+                .collect(),
+        )
     }
 }

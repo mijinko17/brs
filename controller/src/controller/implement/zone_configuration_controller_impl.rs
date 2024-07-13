@@ -3,7 +3,7 @@ use util::async_trait;
 
 use crate::{
     controller::interface::zone_configuratin_controller::ZoneConfigurationController,
-    response::zone_response::ZoneResponse,
+    response::{effective_configuration_response::EffectiveConfigurationWrapResponse, rest_response::RestResponse, zone_response::ZoneResponse},
 };
 
 pub struct ZoneConfigurationControllerImpl<T>
@@ -34,5 +34,9 @@ where
             .into_iter()
             .map(|zone_output| ZoneResponse::new(zone_output.name, vec![]))
             .collect()
+    }
+
+    async fn effective_configuration(&self) -> RestResponse<EffectiveConfigurationWrapResponse> {
+        todo!()
     }
 }
