@@ -1,3 +1,4 @@
+use migration::migrate;
 // use infra::repository::ZoneRepositoryImpl;
 use sea_orm::{ActiveModelTrait, ActiveValue, Database, DbErr, EntityTrait, InsertResult};
 // use usecase::{
@@ -32,6 +33,7 @@ async fn main() {
     // if let Err(err) = block_on(run()) {
     // panic!("{}", err);
     // }
+    migrate().await;
     api::start().await
     // println!("{:?}", ZoneRepositoryImpl.add_zone("hogehoge").await);
     // println!("{:?}", ZoneRepositoryImpl.add_zone("fugafuga").await);

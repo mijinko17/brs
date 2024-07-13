@@ -22,4 +22,5 @@ RUN apt-get install -y --no-install-recommends curl sqlite3
 WORKDIR /app
 COPY --from=builder /app/target/release/brocade-rest-simulator .
 COPY docker_files/self_signed_certs/* self_signed_certs/
+RUN mkdir data && touch data/database.db
 ENTRYPOINT ["./brocade-rest-simulator"]

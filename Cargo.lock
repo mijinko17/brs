@@ -573,6 +573,7 @@ dependencies = [
  "api",
  "entity",
  "futures",
+ "migration",
  "sea-orm",
  "tokio",
 ]

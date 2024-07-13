@@ -12,7 +12,8 @@ sea-orm = { version = "0.12.15", features = [
     "macros",
 ] }
 entity = { path = "./entity" }
-api = { path = "api" }
+api = { path = "./api" }
+migration = { path = "./migration" }
 
 [workspace]
 members = [".", "api", "controller", "entity", "infra", "injection", "migration", "usecase", "util"]

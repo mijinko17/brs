@@ -1,3 +1,4 @@
+use sea_orm::Database;
 pub use sea_orm_migration::prelude::*;
 
 mod m20220101_000001_create_table;
@@ -17,4 +18,11 @@ impl MigratorTrait for Migrator {
             Box::new(m20220101_000004_create_zone_configuration_table::Migration),
         ]
     }
+}
+
+const DATABASE_URL: &str = "sqlite:./data/database.db?mode=rwc";
+
+pub async fn migrate() {
+    let db = Database::connect(DATABASE_URL).await.expect("");
+    Migrator::up(&db, None).await;
 }

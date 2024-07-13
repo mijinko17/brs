@@ -19,19 +19,17 @@ pub async fn start() {
     let config = RustlsConfig::from_pem_file(
         current_dir()
             .unwrap()
-            .join("docker_files")
             .join("self_signed_certs")
             .join("cert.pem"),
         current_dir()
             .unwrap()
-            .join("docker_files")
             .join("self_signed_certs")
             .join("key.pem"),
     )
     .await
     .unwrap();
 
-    let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
+    let addr = SocketAddr::from(([0, 0, 0, 0], 443));
     axum_server::bind_rustls(addr, config)
         .serve(app.into_make_service())
         .await
