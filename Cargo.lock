@@ -132,6 +132,8 @@ version = "0.1.0"
 dependencies = [
  "axum",
  "axum-server",
+ "controller",
+ "injection",
  "tokio",
 ]
 
@@ -325,9 +327,9 @@ checksum = "8b75356056920673b02621b35afd0f7dda9306d03c79a30f5c56c44cf256e3de"
 
 [[package]]
 name = "async-trait"
-version = "0.1.80"
+version = "0.1.81"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c6fa2087f2753a7da8cc1c0dbfcf89579dd57458e36769de5ac750b4671737ca"
+checksum = "6e0c28dcc82d7c8ead5cb13beb15405b57b8546e93215673ff8ca0349a028107"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -363,6 +365,7 @@ checksum = "3a6c9af12842a67734c9a2e355436e5d03b22383ed60cf13cd0c18fbfe3dcbcf"
 dependencies = [
  "async-trait",
  "axum-core",
+ "axum-macros",
  "bytes",
  "futures-util",
  "http",
@@ -408,6 +411,18 @@ dependencies = [
  "tower-layer",
  "tower-service",
  "tracing",
+]
+
+[[package]]
+name = "axum-macros"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "00c055ee2d014ae5981ce1016374e8213682aa14d9bf40e48ab48b5f3ef20eaa"
+dependencies = [
+ "heck 0.4.1",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.69",
 ]
 
 [[package]]
@@ -557,10 +572,8 @@ dependencies = [
  "api",
  "entity",
  "futures",
- "infra",
  "sea-orm",
  "tokio",
- "usecase",
 ]
 
 [[package]]
@@ -694,6 +707,16 @@ name = "const-oid"
 version = "0.9.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c2459377285ad874054d797f3ccebf984978aa39129f6eafde5cdc8315b612f8"
+
+[[package]]
+name = "controller"
+version = "0.1.0"
+dependencies = [
+ "axum",
+ "serde",
+ "serde_json",
+ "usecase",
+]
 
 [[package]]
 name = "core-foundation"
@@ -1350,6 +1373,7 @@ dependencies = [
 name = "infra"
 version = "0.1.0"
 dependencies = [
+ "axum",
  "sea-orm",
  "usecase",
 ]
@@ -1363,6 +1387,15 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.69",
+]
+
+[[package]]
+name = "injection"
+version = "0.1.0"
+dependencies = [
+ "controller",
+ "infra",
+ "usecase",
 ]
 
 [[package]]
@@ -3236,6 +3269,9 @@ checksum = "daf8dba3b7eb870caf1ddeed7bc9d2a049f3cfdfae7cb521b087cc33ae4c49da"
 [[package]]
 name = "usecase"
 version = "0.1.0"
+dependencies = [
+ "axum",
+]
 
 [[package]]
 name = "utf8parse"

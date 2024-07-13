@@ -13,8 +13,6 @@ sea-orm = { version = "0.12.15", features = [
 ] }
 entity = { path = "./entity" }
 api = { path = "api" }
-usecase = { path = "usecase" }
-infra = { path = "infra" }
 
 [workspace]
-members = [".", "api", "entity", "infra", "migration", "usecase"]
+members = [".", "api", "controller", "entity", "infra", "injection", "migration", "usecase"]

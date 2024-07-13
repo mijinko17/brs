@@ -1,5 +1,7 @@
 use std::vec;
 
+use axum::async_trait;
+
 use crate::{
     entity::{wwn::Wwn, zone::Zone},
     input::create_zones_input::CreateZonesInput,
@@ -24,9 +26,10 @@ where
     }
 }
 
+#[async_trait]
 impl<T> ZoneService for ZoneServiceImpl<T>
 where
-    T: ZoneRepository,
+    T: ZoneRepository + Sync,
 {
     async fn create_zones(&self, input: CreateZonesInput) {
         let zones = input

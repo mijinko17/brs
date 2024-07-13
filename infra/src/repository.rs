@@ -1,3 +1,4 @@
+use axum::async_trait;
 use sea_orm::{ActiveModelTrait, ActiveValue, EntityTrait};
 use sea_orm::{Database, DbErr};
 use usecase::entity::zone::Zone;
@@ -7,6 +8,7 @@ const DATABASE_URL: &str = "sqlite:./piyo.db?mode=rwc";
 
 pub struct ZoneRepositoryImpl;
 
+#[async_trait]
 impl ZoneRepository for ZoneRepositoryImpl {
     async fn save(&self, zones: Vec<usecase::entity::zone::Zone>) {
         let db = Database::connect(DATABASE_URL).await.expect("");

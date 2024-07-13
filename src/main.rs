@@ -1,12 +1,11 @@
-use futures::executor::block_on;
-use infra::repository::ZoneRepositoryImpl;
+// use infra::repository::ZoneRepositoryImpl;
 use sea_orm::{ActiveModelTrait, ActiveValue, Database, DbErr, EntityTrait, InsertResult};
-use usecase::{
-    input::{create_zone_input::CreateZoneInput, create_zones_input::CreateZonesInput},
-    service::{
-        implement::zone_service_impl::ZoneServiceImpl, interface::zone_service::ZoneService,
-    },
-};
+// use usecase::{
+//     input::{create_zone_input::CreateZoneInput, create_zones_input::CreateZonesInput},
+//     service::{
+//         implement::zone_service_impl::ZoneServiceImpl, interface::zone_service::ZoneService,
+//     },
+// };
 
 // Change this according to your database implementation,
 // or supply it as an environment variable.
@@ -33,19 +32,19 @@ async fn main() {
     // if let Err(err) = block_on(run()) {
     // panic!("{}", err);
     // }
-    // api::start()
+    api::start().await
     // println!("{:?}", ZoneRepositoryImpl.add_zone("hogehoge").await);
     // println!("{:?}", ZoneRepositoryImpl.add_zone("fugafuga").await);
     // println!("{:?}", ZoneRepositoryImpl.zones().await);
-    let service = ZoneServiceImpl::new(ZoneRepositoryImpl);
-    println!(
-        "{:?}",
-        service
-            .create_zones(CreateZonesInput::new(vec![CreateZoneInput::new(
-                "hoge".to_string(),
-                vec![]
-            )]))
-            .await
-    );
-    println!("{:?}", service.zones().await);
+    // let service = ZoneServiceImpl::new(ZoneRepositoryImpl);
+    // println!(
+    //     "{:?}",
+    //     service
+    //         .create_zones(CreateZonesInput::new(vec![CreateZoneInput::new(
+    //             "hoge".to_string(),
+    //             vec![]
+    //         )]))
+    //         .await
+    // );
+    // println!("{:?}", service.zones().await);
 }

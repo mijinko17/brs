@@ -2,8 +2,8 @@ use super::wwn_output::WwnOutput;
 
 #[derive(Debug)]
 pub struct ZoneOutput {
-    name: String,
-    members: Vec<WwnOutput>,
+    pub name: String,
+    pub members: Vec<WwnOutput>,
 }
 
 impl ZoneOutput {
