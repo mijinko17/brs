@@ -7,7 +7,14 @@ use sea_orm::entity::prelude::*;
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
-    pub value: String,
+    pub v0: u8,
+    pub v1: u8,
+    pub v2: u8,
+    pub v3: u8,
+    pub v4: u8,
+    pub v5: u8,
+    pub v6: u8,
+    pub v7: u8,
     pub zone_id: i32,
 }
 
@@ -19,6 +26,12 @@ pub enum Relation {
         to = "crate::entity::zone::Column::Id",
     )]
     Zone,
+}
+
+impl Related<super::zone::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Zone.def()
+    }
 }
 
 impl ActiveModelBehavior for ActiveModel {}

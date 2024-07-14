@@ -1,13 +1,14 @@
 use serde::Serialize;
+use util::new;
 
-#[derive(Serialize)]
+#[derive(Debug, Serialize)]
 pub struct ZoneResponse {
-    zone_name: String,
-    member_entry: Vec<ZoneMemberEntryResponse>,
+    pub zone_name: String,
+    pub member_entry: ZoneMemberEntryResponse,
 }
 
 impl ZoneResponse {
-    pub fn new(zone_name: String, members: Vec<ZoneMemberEntryResponse>) -> Self {
+    pub fn new(zone_name: String, members: ZoneMemberEntryResponse) -> Self {
         Self {
             zone_name,
             member_entry: members,
@@ -15,7 +16,7 @@ impl ZoneResponse {
     }
 }
 
-#[derive(Serialize)]
+#[derive(Debug, Serialize, new)]
 pub struct ZoneMemberEntryResponse {
-    entry_name: Vec<String>,
+    pub entry_name: Vec<String>,
 }

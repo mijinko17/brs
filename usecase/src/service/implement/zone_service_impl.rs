@@ -4,7 +4,10 @@ use util::async_trait;
 use crate::{
     entity::{wwn::Wwn, zone::Zone},
     input::create_zones_input::CreateZonesInput,
-    output::{zone_configuration_output::ZoneConfigurationOutput, zone_output::ZoneOutput},
+    output::{
+        wwn_output::WwnOutput, zone_configuration_output::ZoneConfigurationOutput,
+        zone_output::ZoneOutput,
+    },
     repository::zone_repository::ZoneRepository,
     service::interface::zone_service::ZoneService,
 };
@@ -63,7 +66,15 @@ where
                 .zones()
                 .await
                 .into_iter()
-                .map(|zone| ZoneOutput::new(zone.name(), vec![]))
+                .map(|zone| {
+                    ZoneOutput::new(
+                        zone.name(),
+                        zone.members()
+                            .into_iter()
+                            .map(|member| WwnOutput::new(member.value()))
+                            .collect(),
+                    )
+                })
                 .collect(),
         )
     }

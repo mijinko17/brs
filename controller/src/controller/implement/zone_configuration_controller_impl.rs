@@ -3,7 +3,13 @@ use util::async_trait;
 
 use crate::{
     controller::interface::zone_configuratin_controller::ZoneConfigurationController,
-    response::{effective_configuration_response::EffectiveConfigurationWrapResponse, rest_response::RestResponse, zone_response::ZoneResponse},
+    response::{
+        effective_configuration_response::{
+            EffectiveConfigurationResponse, EffectiveConfigurationWrapResponse,
+        },
+        rest_response::RestResponse,
+        zone_response::{ZoneMemberEntryResponse, ZoneResponse},
+    },
 };
 
 pub struct ZoneConfigurationControllerImpl<T>
@@ -32,11 +38,30 @@ where
             .zones()
             .await
             .into_iter()
-            .map(|zone_output| ZoneResponse::new(zone_output.name, vec![]))
+            .map(|zone_output| {
+                ZoneResponse::new(zone_output.name, ZoneMemberEntryResponse::new(vec![]))
+            })
             .collect()
     }
 
     async fn effective_configuration(&self) -> RestResponse<EffectiveConfigurationWrapResponse> {
-        todo!()
+        let a = self.zone_service.effective_configuration().await;
+        let b = a.zones;
+        let c = b.into_iter().map(|zone_output| {
+            ZoneResponse::new(
+                zone_output.name,
+                ZoneMemberEntryResponse::new(
+                    zone_output
+                        .members
+                        .into_iter()
+                        .map(|member| member.value[0].to_string())
+                        .collect(),
+                ),
+            )
+        });
+        let d = EffectiveConfigurationResponse::new("checksum".to_string(), c.collect());
+        let e = EffectiveConfigurationWrapResponse::new(d);
+        RestResponse::new(e)
+        // let z=EffectiveConfigurationResponse::new("checksum", )
     }
 }

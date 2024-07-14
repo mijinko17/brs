@@ -1,11 +1,15 @@
 use serde::Serialize;
+use util::new;
 
-#[derive(Debug, Serialize)]
+use super::zone_response::ZoneResponse;
+
+#[derive(Debug, Serialize, new)]
 pub struct EffectiveConfigurationResponse {
-    checksum: String,
+    pub checksum: String,
+    pub enabled_zone: Vec<ZoneResponse>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, new)]
 pub struct EffectiveConfigurationWrapResponse {
-    effective_configuration: EffectiveConfigurationResponse,
+    pub effective_configuration: EffectiveConfigurationResponse,
 }

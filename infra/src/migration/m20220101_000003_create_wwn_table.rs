@@ -21,7 +21,14 @@ impl MigrationTrait for Migration {
                             .auto_increment()
                             .primary_key(),
                     )
-                    .col(ColumnDef::new(Wwn::Value).string().not_null())
+                    .col(ColumnDef::new(Wwn::V0).tiny_unsigned().not_null())
+                    .col(ColumnDef::new(Wwn::V1).tiny_unsigned().not_null())
+                    .col(ColumnDef::new(Wwn::V2).tiny_unsigned().not_null())
+                    .col(ColumnDef::new(Wwn::V3).tiny_unsigned().not_null())
+                    .col(ColumnDef::new(Wwn::V4).tiny_unsigned().not_null())
+                    .col(ColumnDef::new(Wwn::V5).tiny_unsigned().not_null())
+                    .col(ColumnDef::new(Wwn::V6).tiny_unsigned().not_null())
+                    .col(ColumnDef::new(Wwn::V7).tiny_unsigned().not_null())
                     .col(ColumnDef::new(Wwn::ZoneId).integer().not_null())
                     .to_owned(),
             )
@@ -42,6 +49,13 @@ impl MigrationTrait for Migration {
 enum Wwn {
     Table,
     Id,
-    Value,
+    V0,
+    V1,
+    V2,
+    V3,
+    V4,
+    V5,
+    V6,
+    V7,
     ZoneId,
 }

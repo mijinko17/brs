@@ -1,3 +1,4 @@
+use super::entity::prelude::Wwn;
 use sea_orm::{ActiveModelTrait, ActiveValue, EntityTrait};
 use sea_orm::{Database, DbErr};
 use usecase::entity::zone::Zone;
@@ -22,11 +23,24 @@ impl ZoneRepository for ZoneRepositoryImpl {
     async fn zones(&self) -> Vec<usecase::entity::zone::Zone> {
         let db = Database::connect(DATABASE_URL).await.expect("msg");
         let c = super::entity::zone::Entity::find()
+            .find_with_related(Wwn)
             .all(&db)
             .await
             .expect("msg");
+        println!("{:?}", c);
         c.into_iter()
-            .map(|model| Zone::new(model.name, vec![]))
+            .map(|(zone, wwns)| {
+                Zone::new(
+                    zone.name,
+                    wwns.into_iter()
+                        .map(|wwn| {
+                            usecase::entity::wwn::Wwn::new([
+                                wwn.v0, wwn.v1, wwn.v2, wwn.v3, wwn.v4, wwn.v5, wwn.v6, wwn.v7,
+                            ])
+                        })
+                        .collect(),
+                )
+            })
             .collect()
     }
     // pub async fn zones(&self) -> Result<Vec<super::zone::Model>, DbErr> {
@@ -44,4 +58,8 @@ impl ZoneRepository for ZoneRepositoryImpl {
     //     println!("{:?}", hoge.insert(&db).await);
     //     Ok(())
     // }
+}
+
+fn wwn_from_string(str: String) -> Wwn {
+    todo!()
 }

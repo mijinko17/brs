@@ -13,4 +13,7 @@ impl Zone {
     pub fn name(&self) -> String {
         self.name.clone()
     }
+    pub fn members(&self) -> Vec<Wwn> {
+        self.members.clone()
+    }
 }

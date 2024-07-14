@@ -1,6 +1,6 @@
 #[derive(Debug)]
 pub struct WwnOutput {
-    value: [u8; 8],
+    pub value: [u8; 8],
 }
 
 impl WwnOutput {
