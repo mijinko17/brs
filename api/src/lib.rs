@@ -1,10 +1,14 @@
 use axum::{
     response::Html,
-    routing::{get, post}, Router,
+    routing::{get, post},
+    Router,
 };
 use axum_server::tls_rustls::RustlsConfig;
 use handler::{
     fabric_switches_handler::{get_fabric_switches_handler, FABRIC_SWITCH_URL},
+    fibrechannel_name_server_controller::{
+        get_fibrechannel_name_server_handler, FIBRECHANNEL_NAME_SERVER_URL,
+    },
     get_effective_configuration_handler::{
         get_effective_configuration_handler, GET_EFFECTIVE_CONFIGURATION_URL,
     },
@@ -22,6 +26,10 @@ pub async fn start() {
         // .route("/fail", get(handler3))
         .route(LOGIN_URL, post(login_handler))
         .route(FABRIC_SWITCH_URL, get(get_fabric_switches_handler))
+        .route(
+            FIBRECHANNEL_NAME_SERVER_URL,
+            get(get_fibrechannel_name_server_handler),
+        )
         .route(
             GET_EFFECTIVE_CONFIGURATION_URL,
             get(get_effective_configuration_handler),
