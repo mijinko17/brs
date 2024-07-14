@@ -4,4 +4,4 @@ pub mod entity;
 pub mod migration;
 pub mod repository;
 
-pub(crate) const DATABASE_URL: &str = "sqlite:./data/database.db?mode=rwc";
+pub(crate) const DATABASE_URL: &str = "sqlite:./database.db?mode=rwc";

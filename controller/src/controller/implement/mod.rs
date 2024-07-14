@@ -1,1 +1,2 @@
 pub mod zone_configuration_controller_impl;
+pub mod fabric_switch_controller_impl;

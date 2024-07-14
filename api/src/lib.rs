@@ -10,6 +10,7 @@ use controller::{
     response::zone_response::ZoneResponse,
 };
 use handler::{
+    fabric_switches_handler::{get_fabric_switches_handler, FABRIC_SWITCH_URL},
     get_effective_configuration_handler::{
         get_effective_configuration_handler, GET_EFFECTIVE_CONFIGURATION_URL,
     },
@@ -27,6 +28,7 @@ pub async fn start() {
         .route("/", get(handler))
         .route("/zone", get(get_effective_configuration_handler))
         .route(LOGIN_URL, post(login_handler))
+        .route(FABRIC_SWITCH_URL, get(get_fabric_switches_handler))
         .route(
             GET_EFFECTIVE_CONFIGURATION_URL,
             get(get_effective_configuration_handler),

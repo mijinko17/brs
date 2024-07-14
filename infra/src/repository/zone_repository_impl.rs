@@ -1,4 +1,4 @@
-use super::entity::prelude::Wwn;
+use crate::entity::prelude::Wwn;
 use sea_orm::{ActiveModelTrait, ActiveValue, EntityTrait};
 use sea_orm::{Database, DbErr};
 use usecase::entity::zone::Zone;
@@ -13,7 +13,7 @@ pub struct ZoneRepositoryImpl;
 impl ZoneRepository for ZoneRepositoryImpl {
     async fn save(&self, zones: Vec<usecase::entity::zone::Zone>) {
         let db = Database::connect(DATABASE_URL).await.expect("");
-        let hoge = super::entity::zone::ActiveModel {
+        let hoge = crate::entity::zone::ActiveModel {
             name: ActiveValue::set(zones.get(0).unwrap().name()),
             ..Default::default()
         };
@@ -22,12 +22,11 @@ impl ZoneRepository for ZoneRepositoryImpl {
 
     async fn zones(&self) -> Vec<usecase::entity::zone::Zone> {
         let db = Database::connect(DATABASE_URL).await.expect("msg");
-        let c = super::entity::zone::Entity::find()
+        let c = crate::entity::zone::Entity::find()
             .find_with_related(Wwn)
             .all(&db)
             .await
             .expect("msg");
-        println!("{:?}", c);
         c.into_iter()
             .map(|(zone, wwns)| {
                 Zone::new(

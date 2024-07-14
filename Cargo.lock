@@ -561,7 +561,6 @@ dependencies = [
  "api",
  "futures",
  "infra",
- "local-ip-address",
  "sea-orm",
  "tokio",
 ]
@@ -1367,6 +1366,7 @@ dependencies = [
 name = "infra"
 version = "0.1.0"
 dependencies = [
+ "local-ip-address",
  "sea-orm",
  "sea-orm-migration",
  "usecase",
