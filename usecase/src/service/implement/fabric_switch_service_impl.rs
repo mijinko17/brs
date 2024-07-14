@@ -1,4 +1,4 @@
-use util::{async_trait, new};
+use util::{async_trait, error_handling::AppResult, new};
 
 use crate::{
     output::fabric_switch_output::FabricSwitchOutput,
@@ -19,14 +19,15 @@ impl<T> FabricSwitchService for FabricSwitchServiceImpl<T>
 where
     T: FabricSwitchRespistory + Sync,
 {
-    async fn fabric_switches(&self) -> Vec<FabricSwitchOutput> {
-        self.fabric_switch_repository
+    async fn fabric_switches(&self) -> AppResult<Vec<FabricSwitchOutput>> {
+        Ok(self
+            .fabric_switch_repository
             .fabric_switches()
-            .await
+            .await?
             .into_iter()
             .map(|fabric_switch| {
                 FabricSwitchOutput::new(fabric_switch.ip_address, fabric_switch.firmware_version)
             })
-            .collect()
+            .collect())
     }
 }

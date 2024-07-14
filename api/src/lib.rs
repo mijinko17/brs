@@ -1,6 +1,7 @@
 use axum::{
+    handler::Handler,
     http::StatusCode,
-    response::Html,
+    response::{Html, IntoResponse},
     routing::{get, post},
     Json, Router,
 };
@@ -18,6 +19,7 @@ use handler::{
 };
 use injection::zone_configuratin_controller;
 use std::{env::current_dir, net::SocketAddr};
+use util::error_handling::AppError;
 // use injection::zone_configuratin_controller;
 pub mod handler;
 
@@ -27,6 +29,7 @@ pub async fn start() {
     let app = Router::new()
         .route("/", get(handler))
         .route("/zone", get(get_effective_configuration_handler))
+        // .route("/fail", get(handler3))
         .route(LOGIN_URL, post(login_handler))
         .route(FABRIC_SWITCH_URL, get(get_fabric_switches_handler))
         .route(
@@ -66,6 +69,45 @@ async fn handler2() -> (StatusCode, Json<Vec<ZoneResponse>>) {
     (StatusCode::OK, a)
 }
 
-async fn hoge() -> Vec<ZoneResponse> {
-    vec![]
+// impl<E> From<E> for AppError
+// where
+//     E: Into<util::Error>,
+// {
+//     fn from(err: E) -> Self {
+//         Self(err.into())
+//     }
+// }
+
+// struct AppError(util::Error);
+// impl IntoResponse for AppError {
+//     fn into_response(self) -> axum::response::Response {
+//         (StatusCode::BAD_REQUEST, "hoge").into_response()
+//     }
+// }
+
+async fn fail() -> Result<(), util::Error> {
+    util::bail!("failed")
 }
+
+async fn handler3(_: usize) -> Result<(), AppError> {
+    fail().await?;
+    Ok(())
+}
+
+fn handler4(_: usize, _: i32) -> Result<(), AppError> {
+    Ok(())
+}
+
+// impl IntoResponse for AppError {
+//     fn into_response(self) -> axum::response::Response {
+//         match self {
+//             Self::Internal(e) => (StatusCode::INTERNAL_SERVER_ERROR, "internal"),
+//             Self::BadRequest(e) => (StatusCode::BAD_REQUEST, "bad request"),
+//         }
+//         .into_response()
+//     }
+// }
+
+// async fn hoge() -> Vec<ZoneResponse> {
+//     vec![]
+// }
