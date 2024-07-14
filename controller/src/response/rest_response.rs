@@ -6,5 +6,6 @@ pub struct RestResponse<T>
 where
     T: Serialize,
 {
+    #[serde(rename = "Response")]
     response: T,
 }

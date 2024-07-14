@@ -4,6 +4,7 @@ pub fn add(left: usize, right: usize) -> usize {
 
 pub mod response;
 pub mod controller;
+pub mod util;
 
 #[cfg(test)]
 mod tests {

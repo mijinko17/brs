@@ -10,6 +10,7 @@ use crate::{
         rest_response::RestResponse,
         zone_response::{ZoneMemberEntryResponse, ZoneResponse},
     },
+    util::wwn::format_wwn,
 };
 
 pub struct ZoneConfigurationControllerImpl<T>
@@ -54,7 +55,7 @@ where
                     zone_output
                         .members
                         .into_iter()
-                        .map(|member| member.value[0].to_string())
+                        .map(|member| format_wwn(member.value))
                         .collect(),
                 ),
             )
