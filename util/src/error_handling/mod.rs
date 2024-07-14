@@ -45,10 +45,12 @@ pub type AppResult<T> = Result<T, AppError>;
 
 #[derive(Serialize)]
 pub struct RestErrorWrapResponse {
+    #[serde(rename = "errors")]
     errors: RestErrorResponse,
 }
 
 #[derive(Serialize)]
 pub struct RestErrorResponse {
+    #[serde(rename = "error-message")]
     error_message: String,
 }
