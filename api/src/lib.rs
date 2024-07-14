@@ -1,11 +1,19 @@
-use axum::{http::StatusCode, response::Html, routing::get, Json, Router};
+use axum::{
+    http::StatusCode,
+    response::Html,
+    routing::{get, post},
+    Json, Router,
+};
 use axum_server::tls_rustls::RustlsConfig;
 use controller::{
     controller::interface::zone_configuratin_controller::ZoneConfigurationController,
     response::zone_response::ZoneResponse,
 };
-use handler::get_effective_configuration_handler::{
-    get_effective_configuration_handler, GET_EFFECTIVE_CONFIGURATION_URL,
+use handler::{
+    get_effective_configuration_handler::{
+        get_effective_configuration_handler, GET_EFFECTIVE_CONFIGURATION_URL,
+    },
+    login_handler::{login_handler, LOGIN_URL},
 };
 use injection::zone_configuratin_controller;
 use std::{env::current_dir, net::SocketAddr};
@@ -18,6 +26,7 @@ pub async fn start() {
     let app = Router::new()
         .route("/", get(handler))
         .route("/zone", get(get_effective_configuration_handler))
+        .route(LOGIN_URL, post(login_handler))
         .route(
             GET_EFFECTIVE_CONFIGURATION_URL,
             get(get_effective_configuration_handler),
