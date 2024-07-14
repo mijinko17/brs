@@ -1,5 +1,5 @@
 use usecase::service::interface::zone_service::ZoneService;
-use util::async_trait;
+use util::{async_trait, error_handling::AppResult};
 
 use crate::{
     controller::interface::zone_configuratin_controller::ZoneConfigurationController,
@@ -34,35 +34,30 @@ impl<T> ZoneConfigurationController for ZoneConfigurationControllerImpl<T>
 where
     T: ZoneService + Sync,
 {
-    async fn zones(&self) -> Vec<ZoneResponse> {
-        self.zone_service
-            .zones()
-            .await
+    async fn effective_configuration(
+        &self,
+    ) -> AppResult<RestResponse<EffectiveConfigurationWrapResponse>> {
+        let zones = self
+            .zone_service
+            .effective_configuration()
+            .await?
+            .zones
             .into_iter()
             .map(|zone_output| {
-                ZoneResponse::new(zone_output.name, ZoneMemberEntryResponse::new(vec![]))
+                ZoneResponse::new(
+                    zone_output.name,
+                    ZoneMemberEntryResponse::new(
+                        zone_output
+                            .members
+                            .into_iter()
+                            .map(|member| format_wwn(member.value))
+                            .collect(),
+                    ),
+                )
             })
-            .collect()
-    }
-
-    async fn effective_configuration(&self) -> RestResponse<EffectiveConfigurationWrapResponse> {
-        let a = self.zone_service.effective_configuration().await;
-        let b = a.zones;
-        let c = b.into_iter().map(|zone_output| {
-            ZoneResponse::new(
-                zone_output.name,
-                ZoneMemberEntryResponse::new(
-                    zone_output
-                        .members
-                        .into_iter()
-                        .map(|member| format_wwn(member.value))
-                        .collect(),
-                ),
-            )
-        });
-        let d = EffectiveConfigurationResponse::new("checksum".to_string(), c.collect());
-        let e = EffectiveConfigurationWrapResponse::new(d);
-        RestResponse::new(e)
-        // let z=EffectiveConfigurationResponse::new("checksum", )
+            .collect::<Vec<_>>();
+        Ok(RestResponse::new(EffectiveConfigurationWrapResponse::new(
+            EffectiveConfigurationResponse::new("checksum".to_string(), zones),
+        )))
     }
 }

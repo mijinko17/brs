@@ -1,15 +1,8 @@
 use axum::{
-    handler::Handler,
-    http::StatusCode,
-    response::{Html, IntoResponse},
-    routing::{get, post},
-    Json, Router,
+    response::Html,
+    routing::{get, post}, Router,
 };
 use axum_server::tls_rustls::RustlsConfig;
-use controller::{
-    controller::interface::zone_configuratin_controller::ZoneConfigurationController,
-    response::zone_response::ZoneResponse,
-};
 use handler::{
     fabric_switches_handler::{get_fabric_switches_handler, FABRIC_SWITCH_URL},
     get_effective_configuration_handler::{
@@ -17,10 +10,7 @@ use handler::{
     },
     login_handler::{login_handler, LOGIN_URL},
 };
-use injection::zone_configuratin_controller;
 use std::{env::current_dir, net::SocketAddr};
-use util::error_handling::AppError;
-// use injection::zone_configuratin_controller;
 pub mod handler;
 
 pub async fn start() {
@@ -61,14 +51,6 @@ async fn handler() -> Html<&'static str> {
     Html("<h1>Hello, World!</h1>")
 }
 
-async fn handler2() -> (StatusCode, Json<Vec<ZoneResponse>>) {
-    // let b: Vec<ZoneResponse> = vec![ZoneResponse::new("hoge".to_string(), vec![])];
-    let b: Vec<ZoneResponse> = zone_configuratin_controller().zones().await;
-    // let b: Vec<ZoneResponse> = hoge().await;
-    let a: Json<Vec<ZoneResponse>> = Json(b);
-    (StatusCode::OK, a)
-}
-
 // impl<E> From<E> for AppError
 // where
 //     E: Into<util::Error>,
@@ -84,19 +66,6 @@ async fn handler2() -> (StatusCode, Json<Vec<ZoneResponse>>) {
 //         (StatusCode::BAD_REQUEST, "hoge").into_response()
 //     }
 // }
-
-async fn fail() -> Result<(), util::Error> {
-    util::bail!("failed")
-}
-
-async fn handler3(_: usize) -> Result<(), AppError> {
-    fail().await?;
-    Ok(())
-}
-
-fn handler4(_: usize, _: i32) -> Result<(), AppError> {
-    Ok(())
-}
 
 // impl IntoResponse for AppError {
 //     fn into_response(self) -> axum::response::Response {

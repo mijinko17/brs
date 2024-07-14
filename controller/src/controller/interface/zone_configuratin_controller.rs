@@ -1,4 +1,4 @@
-use util::async_trait;
+use util::{async_trait, error_handling::AppResult};
 
 use crate::response::{
     effective_configuration_response::EffectiveConfigurationWrapResponse,
@@ -7,6 +7,5 @@ use crate::response::{
 
 #[async_trait]
 pub trait ZoneConfigurationController {
-    async fn zones(&self) -> Vec<ZoneResponse>;
-    async fn effective_configuration(&self) -> RestResponse<EffectiveConfigurationWrapResponse>;
+    async fn effective_configuration(&self) -> AppResult<RestResponse<EffectiveConfigurationWrapResponse>>;
 }

@@ -1,5 +1,5 @@
 use std::vec;
-use util::async_trait;
+use util::{async_trait, error_handling::AppResult, new};
 
 use crate::{
     entity::{wwn::Wwn, zone::Zone},
@@ -12,6 +12,7 @@ use crate::{
     service::interface::zone_service::ZoneService,
 };
 
+#[derive(new)]
 pub struct ZoneServiceImpl<T>
 where
     T: ZoneRepository,
@@ -19,21 +20,12 @@ where
     repository: T,
 }
 
-impl<T> ZoneServiceImpl<T>
-where
-    T: ZoneRepository,
-{
-    pub fn new(repository: T) -> Self {
-        Self { repository }
-    }
-}
-
 #[async_trait]
 impl<T> ZoneService for ZoneServiceImpl<T>
 where
     T: ZoneRepository + Sync,
 {
-    async fn create_zones(&self, input: CreateZonesInput) {
+    async fn create_zones(&self, input: CreateZonesInput) -> AppResult<()> {
         let zones = input
             .zone_inputs
             .into_iter()
@@ -48,23 +40,25 @@ where
                 )
             })
             .collect();
-        self.repository.save(zones).await;
+        self.repository.save(zones).await?;
+        Ok(())
     }
 
-    async fn zones(&self) -> Vec<crate::output::zone_output::ZoneOutput> {
-        self.repository
+    async fn zones(&self) -> AppResult<Vec<crate::output::zone_output::ZoneOutput>> {
+        Ok(self
+            .repository
             .zones()
-            .await
+            .await?
             .into_iter()
             .map(|zone| ZoneOutput::new(zone.name(), vec![]))
-            .collect()
+            .collect())
     }
-    async fn effective_configuration(&self) -> ZoneConfigurationOutput {
-        ZoneConfigurationOutput::new(
+    async fn effective_configuration(&self) -> AppResult<ZoneConfigurationOutput> {
+        Ok(ZoneConfigurationOutput::new(
             "MainCfg".to_string(),
             self.repository
                 .zones()
-                .await
+                .await?
                 .into_iter()
                 .map(|zone| {
                     ZoneOutput::new(
@@ -76,6 +70,6 @@ where
                     )
                 })
                 .collect(),
-        )
+        ))
     }
 }

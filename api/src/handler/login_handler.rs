@@ -1,7 +1,6 @@
-use axum::http::{HeaderMap, StatusCode};
+use axum::http::HeaderMap;
 
-pub const LOGIN_URL: &str =
-    "/rest/login";
+pub const LOGIN_URL: &str = "/rest/login";
 
 pub async fn login_handler() -> HeaderMap {
     let mut headers = HeaderMap::new();
