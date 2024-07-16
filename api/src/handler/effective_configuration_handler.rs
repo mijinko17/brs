@@ -9,8 +9,7 @@ use controller::{
 use injection::zone_configuratin_controller;
 use util::error_handling::AppResult;
 
-pub const GET_EFFECTIVE_CONFIGURATION_URL: &str =
-    "/rest/running/brocade-zone/effective-configuration";
+pub const EFFECTIVE_CONFIGURATION_URL: &str = "/rest/running/brocade-zone/effective-configuration";
 
 pub async fn get_effective_configuration_handler() -> AppResult<(
     StatusCode,

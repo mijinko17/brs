@@ -1,24 +1,40 @@
+use crate::dao::zone_dao::{ZoneDao, ZoneEntry};
 use crate::entity::prelude::Wwn;
 use crate::DATABASE_URL;
 use sea_orm::Database;
 use sea_orm::{ActiveModelTrait, ActiveValue, EntityTrait};
 use usecase::entity::zone::Zone;
 use usecase::repository::zone_repository::ZoneRepository;
-use util::async_trait;
 use util::error_handling::AppResult;
+use util::{async_trait, new};
 
-pub struct ZoneRepositoryImpl;
+#[derive(new)]
+pub struct ZoneRepositoryImpl<T>
+where
+    T: ZoneDao,
+{
+    zone_dao: T,
+}
 
 #[async_trait]
-impl ZoneRepository for ZoneRepositoryImpl {
+impl<T> ZoneRepository for ZoneRepositoryImpl<T>
+where
+    T: ZoneDao + Sync,
+{
     async fn save(&self, zones: Vec<usecase::entity::zone::Zone>) -> AppResult<()> {
-        let db = Database::connect(DATABASE_URL).await?;
-        let model = crate::entity::zone::ActiveModel {
-            name: ActiveValue::set(zones.get(0).unwrap().name()),
-            ..Default::default()
-        };
-        model.insert(&db).await?;
-        Ok(())
+        let zone_entries = zones
+            .into_iter()
+            .map(|zone| {
+                ZoneEntry::new(
+                    zone.name(),
+                    zone.members()
+                        .into_iter()
+                        .map(|member| member.value())
+                        .collect(),
+                )
+            })
+            .collect();
+        self.zone_dao.save(zone_entries).await
     }
 
     async fn zones(&self) -> AppResult<Vec<usecase::entity::zone::Zone>> {

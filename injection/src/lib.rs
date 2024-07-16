@@ -3,11 +3,12 @@ use controller::controller::{
         fabric_switch_controller_impl::FabricSwitchControllerImpl,
         fibrechannel_name_server_controller_impl::FibrechannelNameServerControllerImpl,
         zone_configuration_controller_impl::ZoneConfigurationControllerImpl,
+        zone_controller_impl::ZoneControllerImpl,
     },
     interface::{
         fabric_switch_controller::FabricSwitchController,
         fibrechannel_name_server_controller::FibrechannelNameServerController,
-        zone_configuratin_controller::ZoneConfigurationController,
+        zone_configuratin_controller::ZoneConfigurationController, zone_controller::ZoneController,
     },
 };
 use infra::{
@@ -41,7 +42,7 @@ use usecase::{
 };
 
 pub fn zone_repository() -> impl ZoneRepository {
-    ZoneRepositoryImpl
+    ZoneRepositoryImpl::new(zone_dao())
 }
 
 pub fn fabric_switch_repository() -> impl FabricSwitchRespistory {
@@ -70,6 +71,10 @@ pub fn zone_configuratin_controller() -> impl ZoneConfigurationController {
 
 pub fn fabric_switch_controller() -> impl FabricSwitchController {
     FabricSwitchControllerImpl::new(fabric_switch_service())
+}
+
+pub fn zone_controller() -> impl ZoneController {
+    ZoneControllerImpl::new(zone_service())
 }
 
 pub fn fibrechannel_name_server_controller() -> impl FibrechannelNameServerController {

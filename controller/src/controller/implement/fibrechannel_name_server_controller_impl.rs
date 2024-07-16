@@ -1,5 +1,5 @@
 use usecase::service::interface::connected_server_service::ConnectedServerService;
-use util::{async_trait, error_handling::AppResult, new};
+use util::{async_trait, error_handling::AppResult, new, wwn::format_wwn};
 
 use crate::{
     controller::interface::fibrechannel_name_server_controller::FibrechannelNameServerController,
@@ -9,7 +9,6 @@ use crate::{
         },
         rest_response::RestResponse,
     },
-    util::wwn::format_wwn,
 };
 
 #[derive(new)]

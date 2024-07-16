@@ -1,5 +1,5 @@
 use usecase::service::interface::zone_service::ZoneService;
-use util::{async_trait, error_handling::AppResult};
+use util::{async_trait, error_handling::AppResult, wwn::format_wwn};
 
 use crate::{
     controller::interface::zone_configuratin_controller::ZoneConfigurationController,
@@ -10,7 +10,6 @@ use crate::{
         rest_response::RestResponse,
         zone_response::{ZoneMemberEntryResponse, ZoneResponse},
     },
-    util::wwn::format_wwn,
 };
 
 pub struct ZoneConfigurationControllerImpl<T>

@@ -1,3 +1,4 @@
 pub mod fabric_switch_controller_impl;
 pub mod fibrechannel_name_server_controller_impl;
 pub mod zone_configuration_controller_impl;
+pub mod zone_controller_impl;
