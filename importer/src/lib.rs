@@ -1,12 +1,17 @@
 use infra::{
-    config::ConfigReader, dao::connected_server_dao::ConnectedServerDao, entity::connected_server,
+    config::{ConfigReader, Wwn, Zone},
+    dao::{
+        connected_server_dao::ConnectedServerDao,
+        zone_dao::{ZoneDao, ZoneEntry},
+    },
+    entity::connected_server,
 };
-use injection::{config_reader, connected_server_dao};
+use injection::{config_reader, connected_server_dao, zone_dao};
 use sea_orm::{ActiveValue::NotSet, Set};
 use util::{async_trait, error_handling::AppResult, new};
 
 pub async fn import() -> AppResult<()> {
-    ImporterImpl::new(config_reader(), connected_server_dao())
+    ImporterImpl::new(config_reader(), connected_server_dao(), zone_dao())
         .import()
         .await
 }
@@ -17,27 +22,25 @@ pub trait Importer {
 }
 
 #[derive(new)]
-pub struct ImporterImpl<T, U>
+pub struct ImporterImpl<T, U, V>
 where
     T: ConfigReader,
     U: ConnectedServerDao,
+    V: ZoneDao,
 {
     config_reader: T,
     connected_server_dao: U,
+    zone_dao: V,
 }
 
-#[async_trait]
-impl<T, U> Importer for ImporterImpl<T, U>
+impl<T, U, V> ImporterImpl<T, U, V>
 where
-    T: ConfigReader + Sync,
-    U: ConnectedServerDao + Sync,
+    T: ConfigReader,
+    U: ConnectedServerDao,
+    V: ZoneDao,
 {
-    async fn import(&self) -> AppResult<()> {
-        let config = self.config_reader.read()?;
-        println!("{:?}", config);
-        let connedted_servers_active_model = config
-            .initial_setting
-            .connected_server
+    async fn import_connected_server(&self, connected_servers: Vec<Wwn>) -> AppResult<()> {
+        let connedted_servers_active_model = connected_servers
             .into_iter()
             .map(|wwn| connected_server::ActiveModel {
                 id: NotSet,
@@ -54,5 +57,38 @@ where
         self.connected_server_dao
             .save(connedted_servers_active_model)
             .await
+    }
+
+    async fn import_zones(&self, zones: Vec<Zone>) -> AppResult<()> {
+        let zone_entries = zones
+            .into_iter()
+            .map(|zone| {
+                ZoneEntry::new(
+                    zone.name,
+                    zone.members
+                        .into_iter()
+                        .map(|member| member.value)
+                        .collect(),
+                )
+            })
+            .collect();
+        self.zone_dao.save(zone_entries).await
+    }
+}
+
+#[async_trait]
+impl<T, U, V> Importer for ImporterImpl<T, U, V>
+where
+    T: ConfigReader + Sync,
+    U: ConnectedServerDao + Sync,
+    V: ZoneDao + Sync,
+{
+    async fn import(&self) -> AppResult<()> {
+        let config = self.config_reader.read()?;
+        println!("{:?}", config);
+        self.import_connected_server(config.initial_setting.connected_server)
+            .await?;
+        self.import_zones(config.initial_setting.zones).await?;
+        Ok(())
     }
 }

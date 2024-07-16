@@ -14,10 +14,11 @@ pub struct ConnectedServerDaoImpl;
 impl ConnectedServerDao for ConnectedServerDaoImpl {
     async fn save(&self, connected_servers: Vec<connected_server::ActiveModel>) -> AppResult<()> {
         let db = Database::connect(DATABASE_URL).await?;
-        connected_server::Entity::insert_many(connected_servers)
+        let a = connected_server::Entity::insert_many(connected_servers)
             .on_empty_do_nothing()
             .exec(&db)
             .await?;
+        println!("{:?}", a);
         Ok(())
     }
 }

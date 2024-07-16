@@ -12,7 +12,10 @@ use controller::controller::{
 };
 use infra::{
     config::{ConfigReader, ConfigReaderImpl},
-    dao::connected_server_dao::{ConnectedServerDao, ConnectedServerDaoImpl},
+    dao::{
+        connected_server_dao::{ConnectedServerDao, ConnectedServerDaoImpl},
+        zone_dao::{ZoneDao, ZoneDaoImpl},
+    },
     import::{Importer, ImporterImpl},
     repository::{
         connected_server_repository_impl::ConnectedServerRepositoryImpl,
@@ -80,6 +83,9 @@ pub fn config_reader() -> impl ConfigReader {
 
 pub fn connected_server_dao() -> impl ConnectedServerDao {
     ConnectedServerDaoImpl
+}
+pub fn zone_dao() -> impl ZoneDao {
+    ZoneDaoImpl
 }
 
 pub fn importer() -> impl Importer {

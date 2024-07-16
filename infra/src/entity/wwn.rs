@@ -15,7 +15,7 @@ pub struct Model {
     pub v5: u8,
     pub v6: u8,
     pub v7: u8,
-    pub zone_id: i32,
+    pub zone_id: u32,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
