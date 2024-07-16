@@ -16,7 +16,6 @@ use infra::{
         connected_server_dao::{ConnectedServerDao, ConnectedServerDaoImpl},
         zone_dao::{ZoneDao, ZoneDaoImpl},
     },
-    import::{Importer, ImporterImpl},
     repository::{
         connected_server_repository_impl::ConnectedServerRepositoryImpl,
         fabric_switch_repository_impl::FabricSwitchRespistoryImpl,
@@ -86,10 +85,6 @@ pub fn connected_server_dao() -> impl ConnectedServerDao {
 }
 pub fn zone_dao() -> impl ZoneDao {
     ZoneDaoImpl
-}
-
-pub fn importer() -> impl Importer {
-    ImporterImpl::new(config_reader(), connected_server_dao())
 }
 
 #[cfg(test)]

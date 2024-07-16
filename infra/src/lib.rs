@@ -2,7 +2,6 @@
 
 pub mod dao;
 pub mod entity;
-pub mod import;
 pub mod migration;
 pub mod repository;
 pub mod config;
