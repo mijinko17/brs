@@ -3,7 +3,7 @@ use util::{async_trait, error_handling::AppResult, new};
 
 use crate::{
     entity::{wwn::Wwn, zone::Zone},
-    input::create_zones_input::CreateZonesInput,
+    input::{create_zones_input::CreateZonesInput, delete_zones_input::DeleteZonesInput},
     output::{
         wwn_output::WwnOutput, zone_configuration_output::ZoneConfigurationOutput,
         zone_output::ZoneOutput,
@@ -42,6 +42,18 @@ where
             .collect();
         self.repository.save(zones).await?;
         Ok(())
+    }
+
+    async fn remove_zones(&self, input: DeleteZonesInput) -> AppResult<()> {
+        self.repository
+            .delete_by_name(
+                input
+                    .0
+                    .into_iter()
+                    .map(|delete_zone_input| delete_zone_input.0)
+                    .collect(),
+            )
+            .await
     }
 
     async fn zones(&self) -> AppResult<Vec<crate::output::zone_output::ZoneOutput>> {

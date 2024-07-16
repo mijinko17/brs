@@ -1,4 +1,4 @@
-use crate::dao::zone_dao::{ZoneDao, ZoneEntry};
+use crate::dao::zone_dao::{DeleteZoneEntry, ZoneDao, ZoneEntry};
 use crate::entity::prelude::Wwn;
 use crate::DATABASE_URL;
 use sea_orm::Database;
@@ -35,6 +35,17 @@ where
             })
             .collect();
         self.zone_dao.save(zone_entries).await
+    }
+
+    async fn delete_by_name(&self, delete_zone_name: Vec<String>) -> AppResult<()> {
+        self.zone_dao
+            .delete(
+                delete_zone_name
+                    .into_iter()
+                    .map(|name| DeleteZoneEntry(name))
+                    .collect(),
+            )
+            .await
     }
 
     async fn zones(&self) -> AppResult<Vec<usecase::entity::zone::Zone>> {

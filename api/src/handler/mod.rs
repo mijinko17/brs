@@ -7,3 +7,4 @@ pub mod enable_effective_configuration_handler;
 pub mod fabric_switches_handler;
 pub mod fibrechannel_name_server_controller;
 pub mod login_handler;
+pub mod defined_configuration_zone_name_handler;

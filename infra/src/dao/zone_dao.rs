@@ -1,5 +1,8 @@
-use sea_orm::{ActiveValue::NotSet, Database, EntityTrait, Set};
-use util::{async_trait, error_handling::AppResult, new};
+use sea_orm::{
+    ActiveValue::NotSet, ColumnTrait, Database, EntityTrait, ModelTrait, QueryFilter, QuerySelect,
+    Set,
+};
+use util::{async_trait, error_handling::AppResult, new, Context};
 
 use crate::{
     entity::{wwn, zone},
@@ -12,9 +15,12 @@ pub struct ZoneEntry {
     members: Vec<[u8; 8]>,
 }
 
+pub struct DeleteZoneEntry(pub String);
+
 #[async_trait]
 pub trait ZoneDao {
     async fn save(&self, zones: Vec<ZoneEntry>) -> AppResult<()>;
+    async fn delete(&self, delete_zones: Vec<DeleteZoneEntry>) -> AppResult<()>;
 }
 
 pub struct ZoneDaoImpl;
@@ -49,6 +55,23 @@ impl ZoneDao for ZoneDaoImpl {
                 .on_empty_do_nothing()
                 .exec(&db)
                 .await?;
+        }
+        Ok(())
+    }
+
+    async fn delete(&self, delete_zones: Vec<DeleteZoneEntry>) -> AppResult<()> {
+        let db = Database::connect(DATABASE_URL).await?;
+        let mut delete_targets = vec![];
+        for delete_zone in delete_zones {
+            let target = zone::Entity::find()
+                .filter(zone::Column::Name.eq(delete_zone.0.clone()))
+                .one(&db)
+                .await?
+                .context(format!("Not found zone {}", delete_zone.0))?;
+            delete_targets.push(target);
+        }
+        for target in delete_targets {
+            target.delete(&db).await?;
         }
         Ok(())
     }

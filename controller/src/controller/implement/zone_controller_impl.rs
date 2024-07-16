@@ -1,6 +1,7 @@
 use usecase::{
     input::{
         create_zone_input::CreateZoneInput, create_zones_input::CreateZonesInput,
+        delete_zone_input::DeleteZoneInput, delete_zones_input::DeleteZonesInput,
         wwn_input::WwnInput,
     },
     service::interface::zone_service::ZoneService,
@@ -37,5 +38,10 @@ where
                     .collect::<Result<Vec<_>, _>>()?,
             )]);
         self.zone_service.create_zones(create_zones_input).await
+    }
+    async fn delete_zone(&self, zone_name: String) -> AppResult<()> {
+        self.zone_service
+            .remove_zones(DeleteZonesInput::new(vec![DeleteZoneInput(zone_name)]))
+            .await
     }
 }

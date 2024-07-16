@@ -7,7 +7,7 @@
         ],
         "zones": [
             {
-                "name": "cool zone",
+                "name": "coolZone",
                 "members": [
                     "11:22:33:44:55:66:77:88",
                     "22:a3:b2:55:f1:ff:55:00",
@@ -15,7 +15,7 @@
                 ]
             },
             {
-                "name": "great zone",
+                "name": "greatZone",
                 "members": [
                     "11:22:33:44:55:66:77:88",
                     "22:a3:b2:55:f1:ff:55:00",
