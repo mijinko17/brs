@@ -29,11 +29,26 @@ pub struct Config {
 #[derive(Debug)]
 pub struct InitialSetting {
     pub connected_server: Vec<Wwn>,
+    pub zones: Vec<Zone>,
 }
 
 #[derive(new, Debug)]
 pub struct Wwn {
     pub value: [u8; 8],
+}
+
+#[derive(new, Debug)]
+pub struct Zone {
+    pub name: String,
+    pub members: Vec<Wwn>,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct RawZone {
+    #[serde(rename = "name")]
+    pub name: String,
+    #[serde(rename = "members")]
+    pub members: Vec<String>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -44,8 +59,10 @@ pub struct RawConfig {
 
 #[derive(Deserialize, Debug)]
 pub struct RawInitialSetting {
-    #[serde(rename = "connectedServers")]
+    #[serde(rename = "connectedServers", default)]
     connected_servers: Vec<String>,
+    #[serde(rename = "zones", default)]
+    zones: Vec<RawZone>,
 }
 
 impl TryFrom<RawConfig> for Config {
@@ -57,9 +74,26 @@ impl TryFrom<RawConfig> for Config {
             .into_iter()
             .map(|raw_wwn| wwn_from_string(raw_wwn).map(Wwn::new))
             .collect::<Result<Vec<_>, _>>()?;
+        let zones = value
+            .initial_setting
+            .zones
+            .into_iter()
+            .map(|raw_zone| {
+                let zone = Zone::new(
+                    raw_zone.name,
+                    raw_zone
+                        .members
+                        .into_iter()
+                        .map(|raw_wwn| wwn_from_string(raw_wwn).map(Wwn::new))
+                        .collect::<Result<Vec<_>, util::Error>>()?,
+                );
+                Ok(zone)
+            })
+            .collect::<Result<Vec<_>, util::Error>>()?;
         Ok(Config {
             initial_setting: InitialSetting {
                 connected_server: connected_servers,
+                zones: zones,
             },
         })
     }

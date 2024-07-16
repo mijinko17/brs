@@ -34,6 +34,7 @@ where
 {
     async fn import(&self) -> AppResult<()> {
         let config = self.config_reader.read()?;
+        println!("{:?}", config);
         let connedted_servers_active_model = config
             .initial_setting
             .connected_server
