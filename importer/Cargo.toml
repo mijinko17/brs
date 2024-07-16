@@ -1,0 +1,14 @@
+[package]
+name = "importer"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+sea-orm = { version = "0.12.15", features = [
+    "sqlx-sqlite",
+    "runtime-async-std-native-tls",
+    "macros",
+] }
+util = { path = "../util" }
+infra = { path = "../infra" }
+injection = { path = "../injection" }

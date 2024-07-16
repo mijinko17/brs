@@ -13,6 +13,17 @@ sea-orm = { version = "0.12.15", features = [
 ] }
 api = { path = "./api" }
 infra = { path = "./infra" }
+importer = { path = "./importer" }
+util = { path = "./util" }
 
 [workspace]
-members = [".", "api", "controller", "infra", "injection", "usecase", "util"]
+members = [
+    ".",
+    "api",
+    "controller",
+    "importer",
+    "infra",
+    "injection",
+    "usecase",
+    "util",
+]

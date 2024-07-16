@@ -10,10 +10,15 @@ use controller::controller::{
         zone_configuratin_controller::ZoneConfigurationController,
     },
 };
-use infra::repository::{
-    connected_server_repository_impl::ConnectedServerRepositoryImpl,
-    fabric_switch_repository_impl::FabricSwitchRespistoryImpl,
-    zone_repository_impl::ZoneRepositoryImpl,
+use infra::{
+    config::{ConfigReader, ConfigReaderImpl},
+    dao::connected_server_dao::{ConnectedServerDao, ConnectedServerDaoImpl},
+    import::{Importer, ImporterImpl},
+    repository::{
+        connected_server_repository_impl::ConnectedServerRepositoryImpl,
+        fabric_switch_repository_impl::FabricSwitchRespistoryImpl,
+        zone_repository_impl::ZoneRepositoryImpl,
+    },
 };
 use usecase::{
     repository::{
@@ -67,6 +72,18 @@ pub fn fabric_switch_controller() -> impl FabricSwitchController {
 
 pub fn fibrechannel_name_server_controller() -> impl FibrechannelNameServerController {
     FibrechannelNameServerControllerImpl::new(connected_server_service())
+}
+
+pub fn config_reader() -> impl ConfigReader {
+    ConfigReaderImpl
+}
+
+pub fn connected_server_dao() -> impl ConnectedServerDao {
+    ConnectedServerDaoImpl
+}
+
+pub fn importer() -> impl Importer {
+    ImporterImpl::new(config_reader(), connected_server_dao())
 }
 
 #[cfg(test)]
