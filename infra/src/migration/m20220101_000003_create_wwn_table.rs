@@ -46,7 +46,7 @@ impl MigrationTrait for Migration {
 }
 
 #[derive(DeriveIden)]
-enum Wwn {
+pub(crate) enum Wwn {
     Table,
     Id,
     V0,
