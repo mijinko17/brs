@@ -56,7 +56,11 @@ where
             })
             .collect::<Vec<_>>();
         Ok(RestResponse::new(EffectiveConfigurationWrapResponse::new(
-            EffectiveConfigurationResponse::new("checksum".to_string(), zones),
+            EffectiveConfigurationResponse::new(
+                Some("nice-cfg".to_string()),
+                zones,
+                "checksum".to_string(),
+            ),
         )))
     }
 }
