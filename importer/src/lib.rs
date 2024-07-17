@@ -40,6 +40,7 @@ where
     V: ZoneDao,
 {
     async fn import_connected_server(&self, connected_servers: Vec<Wwn>) -> AppResult<()> {
+        self.connected_server_dao.delete_all().await?;
         let connedted_servers_active_model = connected_servers
             .into_iter()
             .map(|wwn| connected_server::ActiveModel {
@@ -60,6 +61,7 @@ where
     }
 
     async fn import_zones(&self, zones: Vec<Zone>) -> AppResult<()> {
+        self.zone_dao.delete_all().await?;
         let zone_entries = zones
             .into_iter()
             .map(|zone| {

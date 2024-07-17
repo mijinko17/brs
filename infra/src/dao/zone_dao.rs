@@ -20,6 +20,7 @@ pub struct DeleteZoneEntry(pub String);
 pub trait ZoneDao {
     async fn save(&self, zones: Vec<ZoneEntry>) -> AppResult<()>;
     async fn delete(&self, delete_zones: Vec<DeleteZoneEntry>) -> AppResult<()>;
+    async fn delete_all(&self) -> AppResult<()>;
 }
 
 pub struct ZoneDaoImpl;
@@ -72,6 +73,11 @@ impl ZoneDao for ZoneDaoImpl {
         for target in delete_targets {
             target.delete(&db).await?;
         }
+        Ok(())
+    }
+    async fn delete_all(&self) -> AppResult<()> {
+        let db = Database::connect(DATABASE_URL).await?;
+        zone::Entity::delete_many().exec(&db).await?;
         Ok(())
     }
 }
