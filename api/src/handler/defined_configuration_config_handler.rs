@@ -1,12 +1,13 @@
-use axum::{http::StatusCode, Json};
-use controller::payload::save_zone_configuration_payload::SaveZoneConfigurationPayload;
+use axum::{extract::Path, http::StatusCode, Json};
+use controller::payload::update_zone_configuration_member_payload::UpdateZoneConfigurationMemberWrapPayload;
 use util::error_handling::AppResult;
 
 pub const DEFINED_CONFIGURATION_CONFIG_URL: &str =
-    "/rest/running/brocade-zone/defined-configuration/cfg";
+    "/rest/running/zoning/defined-configuration/cfg/cfg-name/:_cfg_name";
 
 pub async fn update_zone_configuration_member_handler(
-    _: Json<SaveZoneConfigurationPayload>,
+    Path(_cfg_name): Path<String>,
+    _: Json<UpdateZoneConfigurationMemberWrapPayload>,
 ) -> AppResult<(StatusCode, ())> {
     Ok((StatusCode::NO_CONTENT, ()))
 }

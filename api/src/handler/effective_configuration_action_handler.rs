@@ -3,7 +3,7 @@ use controller::payload::save_zone_configuration_payload::SaveZoneConfigurationP
 use util::error_handling::AppResult;
 
 pub const EFFECTIVE_CONFIGURATION_ACTION_URL: &str =
-    "/rest/running/brocade-zone/effective-configuration/cfg-action/1";
+    "/rest/running/zoning/effective-configuration/cfg-action/1";
 
 pub async fn save_zone_configuration_handler(
     _: Json<SaveZoneConfigurationPayload>,

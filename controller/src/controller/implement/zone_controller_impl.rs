@@ -26,10 +26,10 @@ impl<T> ZoneController for ZoneControllerImpl<T>
 where
     T: ZoneService + Sync,
 {
-    async fn create_zone(&self, payload: CreateZonePayload) -> AppResult<()> {
+    async fn create_zone(&self, zone_name: String, payload: CreateZonePayload) -> AppResult<()> {
         let create_zones_input: CreateZonesInput =
             CreateZonesInput::new(vec![CreateZoneInput::new(
-                payload.zone_name,
+                zone_name,
                 payload
                     .member_entry
                     .entry_name
@@ -39,6 +39,7 @@ where
             )]);
         self.zone_service.create_zones(create_zones_input).await
     }
+
     async fn delete_zone(&self, zone_name: String) -> AppResult<()> {
         self.zone_service
             .remove_zones(DeleteZonesInput::new(vec![DeleteZoneInput(zone_name)]))
