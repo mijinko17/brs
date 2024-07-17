@@ -1,5 +1,6 @@
 use sea_orm::Database;
 pub use sea_orm_migration::prelude::*;
+use util::error_handling::AppResult;
 
 use crate::DATABASE_URL;
 
@@ -13,7 +14,6 @@ pub struct Migrator;
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
         vec![
-            // Box::new(m20220101_000003_create_wwn_table::Migration),
             Box::new(m20220101_000002_create_zone_table::Migration),
             Box::new(m20220101_000004_create_zone_configuration_table::Migration),
             Box::new(m20220101_000005_create_connected_server_table::Migration),
@@ -21,7 +21,8 @@ impl MigratorTrait for Migrator {
     }
 }
 
-pub async fn migrate() {
+pub async fn migrate() -> AppResult<()> {
     let db = Database::connect(DATABASE_URL).await.expect("");
-    Migrator::up(&db, None).await;
+    Migrator::up(&db, None).await?;
+    Ok(())
 }

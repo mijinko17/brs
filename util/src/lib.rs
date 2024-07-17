@@ -6,8 +6,3 @@ pub use derive_new::new;
 pub mod error_handling;
 pub mod wwn;
 pub use anyhow::Context;
-
-#[derive(new)]
-struct Hoge {
-    value: i32,
-}

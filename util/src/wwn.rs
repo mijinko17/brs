@@ -9,7 +9,7 @@ pub fn format_wwn(wwn: [u8; 8]) -> String {
 
 pub fn wwn_from_string(wwn: String) -> Result<[u8; 8], anyhow::Error> {
     let a = wwn
-        .split(":")
+        .split(':')
         .map(|elem| u8::from_str_radix(elem, 16))
         .collect::<Result<Vec<_>, _>>()
         .context(format!("Failed to parse wwn {}", wwn))?;

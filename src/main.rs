@@ -12,11 +12,8 @@ async fn main() -> AppResult<()> {
     // this creates a new event, outside of any spans.
     info!(number_of_yaks, "preparing to shave yaks");
 
-    // print!("{:?}", ConfigReaderImpl.read());
     let _ = infra::migration::migrate().await;
     println!("{:?}", importer::import().await);
     api::start().await;
     Ok(())
-    // infra::migration::migrate().await;
-    // api::start().await
 }

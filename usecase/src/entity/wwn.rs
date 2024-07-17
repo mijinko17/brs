@@ -8,6 +8,6 @@ impl Wwn {
         Wwn { value }
     }
     pub fn value(&self) -> [u8; 8] {
-        self.value.clone()
+        self.value
     }
 }

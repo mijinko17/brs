@@ -1,12 +1,14 @@
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use util::new;
 
+#[allow(dead_code)]
 #[derive(Deserialize, new)]
 pub struct UpdateZoneConfigurationMemberWrapPayload {
     #[serde(rename = "cfg")]
     config: UpdateZoneConfigurationMemberPayload,
 }
 
+#[allow(dead_code)]
 #[derive(Deserialize, new)]
 pub struct UpdateZoneConfigurationMemberPayload {
     #[serde(rename = "cfg-name")]
@@ -15,6 +17,7 @@ pub struct UpdateZoneConfigurationMemberPayload {
     member_zone: Vec<UpdateZoneConfigurationZoneNamePayload>,
 }
 
+#[allow(dead_code)]
 #[derive(Deserialize, new)]
 pub struct UpdateZoneConfigurationZoneNamePayload {
     #[serde(rename = "zone-name")]

@@ -93,7 +93,7 @@ impl TryFrom<RawConfig> for Config {
         Ok(Config {
             initial_setting: InitialSetting {
                 connected_server: connected_servers,
-                zones: zones,
+                zones,
             },
         })
     }
@@ -101,7 +101,7 @@ impl TryFrom<RawConfig> for Config {
 
 fn wwn_from_string(wwn: String) -> Result<[u8; 8], util::Error> {
     let a = wwn
-        .split(":")
+        .split(':')
         .map(|elem| u8::from_str_radix(elem, 16))
         .collect::<Result<Vec<_>, _>>()
         .context(format!("Failed to parse wwn {}", wwn))?;

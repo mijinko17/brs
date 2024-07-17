@@ -1,6 +1,5 @@
 use sea_orm::{
-    ActiveValue::NotSet, ColumnTrait, Database, EntityTrait, ModelTrait, QueryFilter, QuerySelect,
-    Set,
+    ActiveValue::NotSet, ColumnTrait, Database, EntityTrait, ModelTrait, QueryFilter, Set,
 };
 use util::{async_trait, error_handling::AppResult, new, Context};
 

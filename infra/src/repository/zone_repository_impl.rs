@@ -2,7 +2,7 @@ use crate::dao::zone_dao::{DeleteZoneEntry, ZoneDao, ZoneEntry};
 use crate::entity::prelude::Wwn;
 use crate::DATABASE_URL;
 use sea_orm::Database;
-use sea_orm::{ActiveModelTrait, ActiveValue, EntityTrait};
+use sea_orm::EntityTrait;
 use usecase::entity::zone::Zone;
 use usecase::repository::zone_repository::ZoneRepository;
 use util::error_handling::AppResult;
@@ -39,12 +39,7 @@ where
 
     async fn delete_by_name(&self, delete_zone_name: Vec<String>) -> AppResult<()> {
         self.zone_dao
-            .delete(
-                delete_zone_name
-                    .into_iter()
-                    .map(|name| DeleteZoneEntry(name))
-                    .collect(),
-            )
+            .delete(delete_zone_name.into_iter().map(DeleteZoneEntry).collect())
             .await
     }
 

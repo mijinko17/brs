@@ -91,8 +91,3 @@ pub fn connected_server_dao() -> impl ConnectedServerDao {
 pub fn zone_dao() -> impl ZoneDao {
     ZoneDaoImpl
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-}

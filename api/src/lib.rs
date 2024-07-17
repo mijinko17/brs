@@ -38,7 +38,6 @@ pub async fn start() {
     let app = Router::new()
         .route("/", get(handler))
         .route("/zone", get(get_effective_configuration_handler))
-        // .route("/fail", get(handler3))
         .route(LOGIN_URL, post(login_handler))
         .route(LOGOUT_URL, post(logout_handler))
         .route(FABRIC_SWITCH_URL, get(get_fabric_switches_handler))
@@ -95,33 +94,3 @@ pub async fn start() {
 async fn handler() -> Html<&'static str> {
     Html("<h1>Hello, World!</h1>")
 }
-
-// impl<E> From<E> for AppError
-// where
-//     E: Into<util::Error>,
-// {
-//     fn from(err: E) -> Self {
-//         Self(err.into())
-//     }
-// }
-
-// struct AppError(util::Error);
-// impl IntoResponse for AppError {
-//     fn into_response(self) -> axum::response::Response {
-//         (StatusCode::BAD_REQUEST, "hoge").into_response()
-//     }
-// }
-
-// impl IntoResponse for AppError {
-//     fn into_response(self) -> axum::response::Response {
-//         match self {
-//             Self::Internal(e) => (StatusCode::INTERNAL_SERVER_ERROR, "internal"),
-//             Self::BadRequest(e) => (StatusCode::BAD_REQUEST, "bad request"),
-//         }
-//         .into_response()
-//     }
-// }
-
-// async fn hoge() -> Vec<ZoneResponse> {
-//     vec![]
-// }

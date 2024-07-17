@@ -2,7 +2,7 @@ use util::{async_trait, error_handling::AppResult};
 
 use crate::response::{
     effective_configuration_response::EffectiveConfigurationWrapResponse,
-    rest_response::RestResponse, zone_response::ZoneResponse,
+    rest_response::RestResponse,
 };
 
 #[async_trait]
