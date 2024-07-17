@@ -7,5 +7,7 @@ use crate::response::{
 
 #[async_trait]
 pub trait ZoneConfigurationController {
-    async fn effective_configuration(&self) -> AppResult<RestResponse<EffectiveConfigurationWrapResponse>>;
+    async fn effective_configuration(
+        &self,
+    ) -> AppResult<RestResponse<EffectiveConfigurationWrapResponse>>;
 }

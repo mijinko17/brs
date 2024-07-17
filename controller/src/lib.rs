@@ -2,9 +2,9 @@ pub fn add(left: usize, right: usize) -> usize {
     left + right
 }
 
-pub mod response;
 pub mod controller;
 pub mod payload;
+pub mod response;
 
 #[cfg(test)]
 mod tests {

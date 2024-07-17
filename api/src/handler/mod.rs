@@ -1,5 +1,6 @@
 pub mod create_zone_handler;
 pub mod defined_configuration_config_handler;
+pub mod defined_configuration_zone_name_handler;
 pub mod effective_configuration_action_handler;
 pub mod effective_configuration_checksum_handler;
 pub mod effective_configuration_handler;
@@ -7,5 +8,4 @@ pub mod enable_effective_configuration_handler;
 pub mod fabric_switches_handler;
 pub mod fibrechannel_name_server_controller;
 pub mod login_handler;
-pub mod defined_configuration_zone_name_handler;
 pub mod logout_handler;
