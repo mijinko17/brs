@@ -87,7 +87,6 @@ where
 {
     async fn import(&self) -> AppResult<()> {
         let config = self.config_reader.read()?;
-        println!("{:?}", config);
         self.import_connected_server(config.initial_setting.connected_server)
             .await?;
         self.import_zones(config.initial_setting.zones).await?;
