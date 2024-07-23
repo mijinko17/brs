@@ -1,9 +1,9 @@
-use local_ip_address::linux::local_ip;
-use std::net::IpAddr;
 use domain::{
     entity::fabric_switch::FabricSwitch,
     repository::fabric_switch_repository::FabricSwitchRespistory,
 };
+use local_ip_address::linux::local_ip;
+use std::net::IpAddr;
 use util::{async_trait, error_handling::AppResult};
 
 pub struct FabricSwitchRespistoryImpl;
