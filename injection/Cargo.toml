@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-domain = { path = "../domain" }
+domain = { path = "../domain", features = ["implement"] }
 infra = { path = "../infra" }
-controller = { path = "../controller" }
+controller = { path = "../controller", features = ["implement"] }
 util = { path = "../util" }
