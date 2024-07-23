@@ -1,8 +1,4 @@
 use crate::dao::zone_dao::{DeleteZoneEntry, ZoneDao, ZoneEntry};
-use crate::entity::prelude::Wwn;
-use crate::DATABASE_URL;
-use sea_orm::Database;
-use sea_orm::EntityTrait;
 use domain::entity::zone::Zone;
 use domain::repository::zone_repository::ZoneRepository;
 use util::error_handling::AppResult;
@@ -44,11 +40,7 @@ where
     }
 
     async fn zones(&self) -> AppResult<Vec<domain::entity::zone::Zone>> {
-        let db = Database::connect(DATABASE_URL).await?;
-        let models = crate::entity::zone::Entity::find()
-            .find_with_related(Wwn)
-            .all(&db)
-            .await?;
+        let models = self.zone_dao.zones().await?;
         Ok(models
             .into_iter()
             .map(|(zone, wwns)| {

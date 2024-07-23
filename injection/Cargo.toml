@@ -7,4 +7,5 @@ edition = "2021"
 domain = { path = "../domain", features = ["implement"] }
 infra = { path = "../infra" }
 controller = { path = "../controller", features = ["implement"] }
+importer = { path = "../importer" }
 util = { path = "../util" }

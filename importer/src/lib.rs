@@ -6,15 +6,8 @@ use infra::{
     },
     entity::connected_server,
 };
-use injection::{config_reader, connected_server_dao, zone_dao};
 use sea_orm::{ActiveValue::NotSet, Set};
 use util::{async_trait, error_handling::AppResult, new};
-
-pub async fn import() -> AppResult<()> {
-    ImporterImpl::new(config_reader(), connected_server_dao(), zone_dao())
-        .import()
-        .await
-}
 
 #[async_trait]
 pub trait Importer {

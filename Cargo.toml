@@ -14,8 +14,7 @@ sea-orm = { version = "0.12.15", features = [
 tracing = "0.1"
 tracing-subscriber = "0.3"
 api = { path = "./api" }
-infra = { path = "./infra" }
-importer = { path = "./importer" }
+injection = { path = "./injection" }
 util = { path = "./util" }
 
 [workspace]

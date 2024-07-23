@@ -1,17 +1,24 @@
-use sea_orm::Database;
 pub use sea_orm_migration::prelude::*;
-use util::error_handling::AppResult;
+use util::{async_trait, error_handling::AppResult, new};
 
-use crate::DATABASE_URL;
+use crate::dao::database_connection_factory::DatabaseConnectionFactory;
 
 mod m20220101_000002_create_zone_table;
 mod m20220101_000004_create_zone_configuration_table;
 mod m20220101_000005_create_connected_server_table;
 
-pub struct Migrator;
+#[async_trait]
+pub trait Migrator: MigratorTrait {
+    async fn migrate(&self) -> AppResult<()>;
+}
 
-#[async_trait::async_trait]
-impl MigratorTrait for Migrator {
+#[derive(new)]
+pub struct MigratorImpl<T: DatabaseConnectionFactory> {
+    connection_factory: T,
+}
+
+#[async_trait]
+impl<T: DatabaseConnectionFactory + Sync + Send> MigratorTrait for MigratorImpl<T> {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
         vec![
             Box::new(m20220101_000002_create_zone_table::Migration),
@@ -21,8 +28,11 @@ impl MigratorTrait for Migrator {
     }
 }
 
-pub async fn migrate() -> AppResult<()> {
-    let db = Database::connect(DATABASE_URL).await.expect("");
-    Migrator::up(&db, None).await?;
-    Ok(())
+#[async_trait]
+impl<T: DatabaseConnectionFactory + Sync + Send> Migrator for MigratorImpl<T> {
+    async fn migrate(&self) -> AppResult<()> {
+        let db = self.connection_factory.connection().await?;
+        Self::up(&db, None).await?;
+        Ok(())
+    }
 }

@@ -566,8 +566,7 @@ version = "0.1.0"
 dependencies = [
  "api",
  "futures",
- "importer",
- "infra",
+ "injection",
  "sea-orm",
  "tokio",
  "tracing",
@@ -1374,7 +1373,6 @@ name = "importer"
 version = "0.1.0"
 dependencies = [
  "infra",
- "injection",
  "sea-orm",
  "util",
 ]
@@ -1421,6 +1419,7 @@ version = "0.1.0"
 dependencies = [
  "controller",
  "domain",
+ "importer",
  "infra",
  "util",
 ]

@@ -11,18 +11,6 @@ use controller::controller::{
         zone_configuratin_controller::ZoneConfigurationController, zone_controller::ZoneController,
     },
 };
-use infra::{
-    config::{ConfigReader, ConfigReaderImpl},
-    dao::{
-        connected_server_dao::{ConnectedServerDao, ConnectedServerDaoImpl},
-        zone_dao::{ZoneDao, ZoneDaoImpl},
-    },
-    repository::{
-        connected_server_repository_impl::ConnectedServerRepositoryImpl,
-        fabric_switch_repository_impl::FabricSwitchRespistoryImpl,
-        zone_repository_impl::ZoneRepositoryImpl,
-    },
-};
 use domain::{
     repository::{
         connected_server_repository::ConnectedServerRepository,
@@ -40,6 +28,36 @@ use domain::{
         },
     },
 };
+use importer::ImporterImpl;
+use infra::{
+    config::{ConfigReader, ConfigReaderImpl},
+    dao::{
+        connected_server_dao::{ConnectedServerDao, ConnectedServerDaoImpl},
+        database_connection_factory::{DatabaseConnectionFactory, DatabaseConnectionFactoryImpl},
+        zone_dao::{ZoneDao, ZoneDaoImpl},
+    },
+    migration::MigratorImpl,
+    repository::{
+        connected_server_repository_impl::ConnectedServerRepositoryImpl,
+        fabric_switch_repository_impl::FabricSwitchRespistoryImpl,
+        zone_repository_impl::ZoneRepositoryImpl,
+    },
+};
+
+pub use importer::Importer;
+pub use infra::migration::Migrator;
+
+pub fn database_connection_factory() -> impl DatabaseConnectionFactory {
+    DatabaseConnectionFactoryImpl
+}
+
+pub fn zone_dao() -> impl ZoneDao {
+    ZoneDaoImpl::new(database_connection_factory())
+}
+
+pub fn connected_server_dao() -> impl ConnectedServerDao {
+    ConnectedServerDaoImpl::new(database_connection_factory())
+}
 
 pub fn zone_repository() -> impl ZoneRepository {
     ZoneRepositoryImpl::new(zone_dao())
@@ -50,7 +68,7 @@ pub fn fabric_switch_repository() -> impl FabricSwitchRespistory {
 }
 
 pub fn connected_server_repository() -> impl ConnectedServerRepository {
-    ConnectedServerRepositoryImpl
+    ConnectedServerRepositoryImpl::new(connected_server_dao())
 }
 
 pub fn zone_service() -> impl ZoneService {
@@ -85,9 +103,10 @@ pub fn config_reader() -> impl ConfigReader {
     ConfigReaderImpl
 }
 
-pub fn connected_server_dao() -> impl ConnectedServerDao {
-    ConnectedServerDaoImpl
+pub fn migrator() -> impl Migrator {
+    MigratorImpl::new(database_connection_factory())
 }
-pub fn zone_dao() -> impl ZoneDao {
-    ZoneDaoImpl
+
+pub fn importer() -> impl Importer {
+    ImporterImpl::new(config_reader(), connected_server_dao(), zone_dao())
 }

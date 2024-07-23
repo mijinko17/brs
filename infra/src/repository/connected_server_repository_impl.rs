@@ -1,20 +1,22 @@
-use sea_orm::{Database, EntityTrait};
 use domain::{
     entity::connected_server::ConnectedServer,
     repository::connected_server_repository::ConnectedServerRepository,
 };
-use util::{async_trait, error_handling::AppResult};
+use util::{async_trait, error_handling::AppResult, new};
 
-use crate::DATABASE_URL;
+use crate::dao::connected_server_dao::ConnectedServerDao;
 
-pub struct ConnectedServerRepositoryImpl;
+#[derive(new)]
+pub struct ConnectedServerRepositoryImpl<T: ConnectedServerDao> {
+    conected_server_dao: T,
+}
 
 #[async_trait]
-impl ConnectedServerRepository for ConnectedServerRepositoryImpl {
+impl<T: ConnectedServerDao + Sync> ConnectedServerRepository for ConnectedServerRepositoryImpl<T> {
     async fn connected_servers(&self) -> AppResult<Vec<ConnectedServer>> {
-        let db = Database::connect(DATABASE_URL).await?;
-        Ok(crate::entity::connected_server::Entity::find()
-            .all(&db)
+        Ok(self
+            .conected_server_dao
+            .connected_servers()
             .await?
             .into_iter()
             .map(|model| {

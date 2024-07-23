@@ -1,3 +1,4 @@
+use injection::{importer, migrator, Importer, Migrator};
 use util::error_handling::AppResult;
 
 #[tokio::main]
@@ -7,8 +8,8 @@ async fn main() -> AppResult<()> {
         .with_test_writer()
         .init();
 
-    infra::migration::migrate().await?;
-    importer::import().await?;
+    migrator().migrate().await?;
+    importer().import().await?;
     api::start().await;
     Ok(())
 }

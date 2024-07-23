@@ -5,5 +5,3 @@ pub mod dao;
 pub mod entity;
 pub mod migration;
 pub mod repository;
-
-pub(crate) const DATABASE_URL: &str = "sqlite:./data/database.db?mode=rwc";
