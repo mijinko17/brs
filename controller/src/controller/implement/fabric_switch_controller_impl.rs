@@ -1,4 +1,4 @@
-use usecase::service::interface::fabric_switch_service::FabricSwitchService;
+use domain::service::interface::fabric_switch_service::FabricSwitchService;
 use util::{async_trait, error_handling::AppResult, new};
 
 use crate::{

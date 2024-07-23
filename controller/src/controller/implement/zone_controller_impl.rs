@@ -1,4 +1,4 @@
-use usecase::{
+use domain::{
     input::{
         create_zone_input::CreateZoneInput, create_zones_input::CreateZonesInput,
         delete_zone_input::DeleteZoneInput, delete_zones_input::DeleteZonesInput,

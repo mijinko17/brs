@@ -3,8 +3,8 @@ use crate::entity::prelude::Wwn;
 use crate::DATABASE_URL;
 use sea_orm::Database;
 use sea_orm::EntityTrait;
-use usecase::entity::zone::Zone;
-use usecase::repository::zone_repository::ZoneRepository;
+use domain::entity::zone::Zone;
+use domain::repository::zone_repository::ZoneRepository;
 use util::error_handling::AppResult;
 use util::{async_trait, new};
 
@@ -21,7 +21,7 @@ impl<T> ZoneRepository for ZoneRepositoryImpl<T>
 where
     T: ZoneDao + Sync,
 {
-    async fn save(&self, zones: Vec<usecase::entity::zone::Zone>) -> AppResult<()> {
+    async fn save(&self, zones: Vec<domain::entity::zone::Zone>) -> AppResult<()> {
         let zone_entries = zones
             .into_iter()
             .map(|zone| {
@@ -43,7 +43,7 @@ where
             .await
     }
 
-    async fn zones(&self) -> AppResult<Vec<usecase::entity::zone::Zone>> {
+    async fn zones(&self) -> AppResult<Vec<domain::entity::zone::Zone>> {
         let db = Database::connect(DATABASE_URL).await?;
         let models = crate::entity::zone::Entity::find()
             .find_with_related(Wwn)
@@ -56,7 +56,7 @@ where
                     zone.name,
                     wwns.into_iter()
                         .map(|wwn| {
-                            usecase::entity::wwn::Wwn::new([
+                            domain::entity::wwn::Wwn::new([
                                 wwn.v0, wwn.v1, wwn.v2, wwn.v3, wwn.v4, wwn.v5, wwn.v6, wwn.v7,
                             ])
                         })

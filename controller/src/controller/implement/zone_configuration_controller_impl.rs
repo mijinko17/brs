@@ -1,4 +1,4 @@
-use usecase::service::interface::zone_service::ZoneService;
+use domain::service::interface::zone_service::ZoneService;
 use util::{async_trait, error_handling::AppResult, wwn::format_wwn};
 
 use crate::{

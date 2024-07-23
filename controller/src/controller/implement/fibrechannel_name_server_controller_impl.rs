@@ -1,4 +1,4 @@
-use usecase::service::interface::connected_server_service::ConnectedServerService;
+use domain::service::interface::connected_server_service::ConnectedServerService;
 use util::{async_trait, error_handling::AppResult, new, wwn::format_wwn};
 
 use crate::{

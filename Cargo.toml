@@ -26,6 +26,6 @@ members = [
     "importer",
     "infra",
     "injection",
-    "usecase",
+    "domain",
     "util",
 ]

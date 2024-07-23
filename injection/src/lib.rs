@@ -23,7 +23,7 @@ use infra::{
         zone_repository_impl::ZoneRepositoryImpl,
     },
 };
-use usecase::{
+use domain::{
     repository::{
         connected_server_repository::ConnectedServerRepository,
         fabric_switch_repository::FabricSwitchRespistory, zone_repository::ZoneRepository,

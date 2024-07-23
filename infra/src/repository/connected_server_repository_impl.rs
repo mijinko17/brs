@@ -1,5 +1,5 @@
 use sea_orm::{Database, EntityTrait};
-use usecase::{
+use domain::{
     entity::connected_server::ConnectedServer,
     repository::connected_server_repository::ConnectedServerRepository,
 };

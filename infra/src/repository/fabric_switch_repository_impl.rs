@@ -1,6 +1,6 @@
 use local_ip_address::linux::local_ip;
 use std::net::IpAddr;
-use usecase::{
+use domain::{
     entity::fabric_switch::FabricSwitch,
     repository::fabric_switch_repository::FabricSwitchRespistory,
 };
