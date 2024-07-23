@@ -37,7 +37,6 @@ pub mod handler;
 pub async fn start() {
     let app = Router::new()
         .route("/", get(handler))
-        .route("/zone", get(get_effective_configuration_handler))
         .route(LOGIN_URL, post(login_handler))
         .route(LOGOUT_URL, post(logout_handler))
         .route(FABRIC_SWITCH_URL, get(get_fabric_switches_handler))
@@ -92,5 +91,21 @@ pub async fn start() {
 }
 
 async fn handler() -> Html<&'static str> {
-    Html("<h1>Hello, World!</h1>")
+    Html(
+        "
+    <h1>Brocade REST Simulator</h1>
+    <h2>Browse</h2>
+    <ul>
+      <li>
+        <a href=\"./rest/running/zoning/effective-configuration\">Effective Configuration</a>
+      </li>
+      <li>
+        <a href=\"./rest/running/brocade-fabric/fabric-switch\">Fabrics</a>
+      </li>
+      <li>
+        <a href=\"./rest/running/brocade-name-server/fibrechannel-name-server\">Name Server</a>
+      </li>
+    </ul>
+    ",
+    )
 }
