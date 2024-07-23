@@ -18,6 +18,11 @@ impl MigrationTrait for Migration {
                             .auto_increment()
                             .primary_key(),
                     )
+                    .col(
+                        ColumnDef::new(Zone::CfgId)
+                            .integer()
+                            .default(Value::Bool(None)),
+                    )
                     .col(ColumnDef::new(Zone::Name).string().not_null())
                     .to_owned(),
             )
@@ -68,6 +73,7 @@ enum Zone {
     Table,
     Id,
     Name,
+    CfgId,
 }
 
 #[derive(DeriveIden)]

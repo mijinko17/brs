@@ -14,17 +14,21 @@ use controller::controller::{
 use domain::{
     repository::{
         connected_server_repository::ConnectedServerRepository,
-        fabric_switch_repository::FabricSwitchRespistory, zone_repository::ZoneRepository,
+        fabric_switch_repository::FabricSwitchRespistory,
+        zone_configuration_repository::ZoneConfigurationRepository,
+        zone_repository::ZoneRepository,
     },
     service::{
         implement::{
             connected_server_service_impl::ConnectedServerServiceImpl,
             fabric_switch_service_impl::FabricSwitchServiceImpl,
+            zone_configuration_service_impl::ZoneConfigurationServiceImpl,
             zone_service_impl::ZoneServiceImpl,
         },
         interface::{
             connected_server_service::ConnectedServerService,
-            fabric_switch_service::FabricSwitchService, zone_service::ZoneService,
+            fabric_switch_service::FabricSwitchService,
+            zone_configuration_service::ZoneConfigurationService, zone_service::ZoneService,
         },
     },
 };
@@ -34,12 +38,14 @@ use infra::{
     dao::{
         connected_server_dao::{ConnectedServerDao, ConnectedServerDaoImpl},
         database_connection_factory::{DatabaseConnectionFactory, DatabaseConnectionFactoryImpl},
+        zone_configuration_dao::{ZoneConfigurationDao, ZoneConfigurationDaoImpl},
         zone_dao::{ZoneDao, ZoneDaoImpl},
     },
     migration::MigratorImpl,
     repository::{
         connected_server_repository_impl::ConnectedServerRepositoryImpl,
         fabric_switch_repository_impl::FabricSwitchRespistoryImpl,
+        zone_configuration_repository_impl::ZoneConfigurationRepositoryImpl,
         zone_repository_impl::ZoneRepositoryImpl,
     },
 };
@@ -55,12 +61,20 @@ pub fn zone_dao() -> impl ZoneDao {
     ZoneDaoImpl::new(database_connection_factory())
 }
 
+pub fn zone_configuration_dao() -> impl ZoneConfigurationDao {
+    ZoneConfigurationDaoImpl::new(database_connection_factory())
+}
+
 pub fn connected_server_dao() -> impl ConnectedServerDao {
     ConnectedServerDaoImpl::new(database_connection_factory())
 }
 
 pub fn zone_repository() -> impl ZoneRepository {
     ZoneRepositoryImpl::new(zone_dao())
+}
+
+pub fn zone_configuration_repository() -> impl ZoneConfigurationRepository {
+    ZoneConfigurationRepositoryImpl::new(zone_configuration_dao())
 }
 
 pub fn fabric_switch_repository() -> impl FabricSwitchRespistory {
@@ -75,6 +89,10 @@ pub fn zone_service() -> impl ZoneService {
     ZoneServiceImpl::new(zone_repository())
 }
 
+pub fn zone_configuration_service() -> impl ZoneConfigurationService {
+    ZoneConfigurationServiceImpl::new(zone_configuration_repository())
+}
+
 pub fn fabric_switch_service() -> impl FabricSwitchService {
     FabricSwitchServiceImpl::new(fabric_switch_repository())
 }
@@ -84,7 +102,7 @@ pub fn connected_server_service() -> impl ConnectedServerService {
 }
 
 pub fn zone_configuratin_controller() -> impl ZoneConfigurationController {
-    ZoneConfigurationControllerImpl::new(zone_service())
+    ZoneConfigurationControllerImpl::new(zone_configuration_service())
 }
 
 pub fn fabric_switch_controller() -> impl FabricSwitchController {

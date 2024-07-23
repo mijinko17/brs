@@ -1,4 +1,6 @@
-use domain::service::interface::zone_service::ZoneService;
+use std::vec;
+
+use domain::service::interface::zone_configuration_service::ZoneConfigurationService;
 use util::{async_trait, error_handling::AppResult, wwn::format_wwn};
 
 use crate::{
@@ -14,14 +16,14 @@ use crate::{
 
 pub struct ZoneConfigurationControllerImpl<T>
 where
-    T: ZoneService,
+    T: ZoneConfigurationService,
 {
     zone_service: T,
 }
 
 impl<T> ZoneConfigurationControllerImpl<T>
 where
-    T: ZoneService,
+    T: ZoneConfigurationService,
 {
     pub fn new(zone_service: T) -> Self {
         Self { zone_service }
@@ -31,36 +33,45 @@ where
 #[async_trait]
 impl<T> ZoneConfigurationController for ZoneConfigurationControllerImpl<T>
 where
-    T: ZoneService + Sync,
+    T: ZoneConfigurationService + Sync,
 {
     async fn effective_configuration(
         &self,
     ) -> AppResult<RestResponse<EffectiveConfigurationWrapResponse>> {
-        let zones = self
+        let effective_configuration_response = self
             .zone_service
             .effective_configuration()
             .await?
-            .zones
-            .into_iter()
-            .map(|zone_output| {
-                ZoneResponse::new(
-                    zone_output.name,
-                    ZoneMemberEntryResponse::new(
-                        zone_output
-                            .members
-                            .into_iter()
-                            .map(|member| format_wwn(member.value))
-                            .collect(),
-                    ),
+            .map(|output| {
+                let zones = output
+                    .zones
+                    .into_iter()
+                    .map(|zone_output| {
+                        ZoneResponse::new(
+                            zone_output.name,
+                            ZoneMemberEntryResponse::new(
+                                zone_output
+                                    .members
+                                    .into_iter()
+                                    .map(|member| format_wwn(member.value))
+                                    .collect(),
+                            ),
+                        )
+                    })
+                    .collect::<Vec<_>>();
+                EffectiveConfigurationResponse::new(
+                    Some(output.name),
+                    zones,
+                    "checksum".to_string(),
                 )
             })
-            .collect::<Vec<_>>();
-        Ok(RestResponse::new(EffectiveConfigurationWrapResponse::new(
-            EffectiveConfigurationResponse::new(
-                Some("nice-cfg".to_string()),
-                zones,
+            .unwrap_or(EffectiveConfigurationResponse::new(
+                None,
+                vec![],
                 "checksum".to_string(),
-            ),
+            ));
+        Ok(RestResponse::new(EffectiveConfigurationWrapResponse::new(
+            effective_configuration_response,
         )))
     }
 }
