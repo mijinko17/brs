@@ -23,5 +23,5 @@ WORKDIR /app
 RUN mkdir data && touch data/database.db
 COPY --from=builder /app/target/release/brocade-rest-simulator .
 COPY docker_files/self_signed_certs/* self_signed_certs/
-COPY importer/config.json .
+COPY docker_files/config.json .
 ENTRYPOINT ["./brocade-rest-simulator"]
