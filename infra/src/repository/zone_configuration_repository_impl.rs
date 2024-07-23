@@ -1,5 +1,5 @@
 use domain::{
-    entity::zone_configuration::ZoneConfiguration,
+    entity::{zone::Zone, zone_configuration::ZoneConfiguration},
     repository::zone_configuration_repository::ZoneConfigurationRepository,
 };
 use util::{async_trait, error_handling::AppResult, new};
@@ -20,7 +20,27 @@ impl<T: ZoneConfigurationDao + Sync> ZoneConfigurationRepository
             .zone_configuration_dao
             .effective_configuration()
             .await?;
-        let b = a.map(|model| ZoneConfiguration::new(model.name, vec![]));
+        let b = a.map(|(config, zone_with_wwn)| {
+            ZoneConfiguration::new(
+                config.name,
+                zone_with_wwn
+                    .into_iter()
+                    .map(|(zone, wwns)| {
+                        Zone::new(
+                            zone.name,
+                            wwns.into_iter()
+                                .map(|wwn| {
+                                    domain::entity::wwn::Wwn::new([
+                                        wwn.v0, wwn.v1, wwn.v2, wwn.v3, wwn.v4, wwn.v5, wwn.v6,
+                                        wwn.v7,
+                                    ])
+                                })
+                                .collect(),
+                        )
+                    })
+                    .collect(),
+            )
+        });
         Ok(b)
     }
 }

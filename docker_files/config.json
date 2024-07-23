@@ -5,22 +5,48 @@
             "22:a3:b2:55:f1:ff:55:00",
             "22:a3:AB:55:f1:FF:55:00"
         ],
-        "zones": [
+        "zoneConfigurations": [
             {
-                "name": "coolZone",
-                "members": [
-                    "11:22:33:44:55:66:77:88",
-                    "22:a3:b2:55:f1:ff:55:00",
-                    "22:a3:AB:55:f1:FF:55:00"
+                "name": "WowCfg",
+                "isEffective": false,
+                "zones": [
+                    {
+                        "name": "coolZone",
+                        "members": [
+                            "11:22:33:44:55:66:77:88",
+                            "22:a3:b2:55:f1:ff:55:00",
+                            "22:a3:AB:55:f1:FF:55:00"
+                        ]
+                    },
+                    {
+                        "name": "greatZone",
+                        "members": [
+                            "11:22:33:44:55:66:77:88",
+                            "22:a3:b2:55:f1:ff:55:00",
+                            "22:a3:AB:55:f1:FF:55:00",
+                            "AB:a3:AB:55:55:FF:55:00"
+                        ]
+                    }
                 ]
             },
             {
-                "name": "greatZone",
-                "members": [
-                    "11:22:33:44:55:66:77:88",
-                    "22:a3:b2:55:f1:ff:55:00",
-                    "22:a3:AB:55:f1:FF:55:00",
-                    "AB:a3:AB:55:55:FF:55:00"
+                "name": "TsukaretaCfg",
+                "isEffective": true,
+                "zones": [
+                    {
+                        "name": "UoooZone",
+                        "members": [
+                            "11:22:33:44:55:66:77:88",
+                            "22:a3:b2:55:f1:ff:55:00",
+                            "22:a3:AB:55:f1:FF:55:00"
+                        ]
+                    },
+                    {
+                        "name": "PoyopoyoZone",
+                        "members": [
+                            "11:22:33:44:55:66:77:88"
+                        ]
+                    }
                 ]
             }
         ]

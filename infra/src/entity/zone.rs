@@ -8,15 +8,28 @@ pub struct Model {
     #[sea_orm(primary_key)]
     pub id: u32,
     pub name: String,
+    pub cfg_id: Option<i32>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
     #[sea_orm(has_many = "super::wwn::Entity")]
     Wwn,
+    #[sea_orm(
+        belongs_to = "crate::entity::zone_configuration::Entity",
+        from = "crate::entity::zone::Column::CfgId"
+        to = "crate::entity::zone_configuration::Column::Id",
+    )]
+    Zone,
 }
 
 impl Related<super::wwn::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Wwn.def()
+    }
+}
+
+impl Related<super::zone_configuration::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::Wwn.def()
     }

@@ -19,7 +19,11 @@ impl MigrationTrait for Migration {
                             .primary_key(),
                     )
                     .col(ColumnDef::new(ZoneConfiguration::Name).string().not_null())
-                    .col(ColumnDef::new(ZoneConfiguration::IsEffective).boolean().not_null())
+                    .col(
+                        ColumnDef::new(ZoneConfiguration::IsEffective)
+                            .boolean()
+                            .not_null(),
+                    )
                     .to_owned(),
             )
             .await

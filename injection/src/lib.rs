@@ -38,6 +38,7 @@ use infra::{
     dao::{
         connected_server_dao::{ConnectedServerDao, ConnectedServerDaoImpl},
         database_connection_factory::{DatabaseConnectionFactory, DatabaseConnectionFactoryImpl},
+        wwn_dao::{WwnDao, WwnDaoImpl},
         zone_configuration_dao::{ZoneConfigurationDao, ZoneConfigurationDaoImpl},
         zone_dao::{ZoneDao, ZoneDaoImpl},
     },
@@ -61,6 +62,10 @@ pub fn zone_dao() -> impl ZoneDao {
     ZoneDaoImpl::new(database_connection_factory())
 }
 
+pub fn wwn_dao() -> impl WwnDao {
+    WwnDaoImpl::new(database_connection_factory())
+}
+
 pub fn zone_configuration_dao() -> impl ZoneConfigurationDao {
     ZoneConfigurationDaoImpl::new(database_connection_factory())
 }
@@ -70,7 +75,7 @@ pub fn connected_server_dao() -> impl ConnectedServerDao {
 }
 
 pub fn zone_repository() -> impl ZoneRepository {
-    ZoneRepositoryImpl::new(zone_dao())
+    ZoneRepositoryImpl::new(zone_dao(), wwn_dao())
 }
 
 pub fn zone_configuration_repository() -> impl ZoneConfigurationRepository {
@@ -126,5 +131,11 @@ pub fn migrator() -> impl Migrator {
 }
 
 pub fn importer() -> impl Importer {
-    ImporterImpl::new(config_reader(), connected_server_dao(), zone_dao())
+    ImporterImpl::new(
+        config_reader(),
+        connected_server_dao(),
+        zone_dao(),
+        zone_configuration_dao(),
+        wwn_dao(),
+    )
 }

@@ -29,7 +29,7 @@ pub struct Config {
 #[derive(Debug)]
 pub struct InitialSetting {
     pub connected_server: Vec<Wwn>,
-    pub zones: Vec<Zone>,
+    pub zone_configurations: Vec<ZoneConfigurationConfig>,
 }
 
 #[derive(new, Debug)]
@@ -41,6 +41,23 @@ pub struct Wwn {
 pub struct Zone {
     pub name: String,
     pub members: Vec<Wwn>,
+}
+
+#[derive(new, Debug)]
+pub struct ZoneConfigurationConfig {
+    pub name: String,
+    pub zones: Vec<Zone>,
+    pub is_effective: bool,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct RawZoneConfigurationConfig {
+    #[serde(rename = "name")]
+    pub name: String,
+    #[serde(rename = "zones")]
+    pub zones: Vec<RawZone>,
+    #[serde(rename = "isEffective")]
+    pub is_effective: Option<bool>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -61,8 +78,8 @@ pub struct RawConfig {
 pub struct RawInitialSetting {
     #[serde(rename = "connectedServers", default)]
     connected_servers: Vec<String>,
-    #[serde(rename = "zones", default)]
-    zones: Vec<RawZone>,
+    #[serde(rename = "zoneConfigurations", default)]
+    zone_configurations: Vec<RawZoneConfigurationConfig>,
 }
 
 impl TryFrom<RawConfig> for Config {
@@ -76,24 +93,33 @@ impl TryFrom<RawConfig> for Config {
             .collect::<Result<Vec<_>, _>>()?;
         let zones = value
             .initial_setting
-            .zones
+            .zone_configurations
             .into_iter()
-            .map(|raw_zone| {
-                let zone = Zone::new(
-                    raw_zone.name,
-                    raw_zone
-                        .members
+            .map(|raw_zone_configuration| {
+                Ok(ZoneConfigurationConfig::new(
+                    raw_zone_configuration.name,
+                    raw_zone_configuration
+                        .zones
                         .into_iter()
-                        .map(|raw_wwn| wwn_from_string(raw_wwn).map(Wwn::new))
+                        .map(|raw_zone| {
+                            Ok(Zone::new(
+                                raw_zone.name,
+                                raw_zone
+                                    .members
+                                    .into_iter()
+                                    .map(|raw_wwn| wwn_from_string(raw_wwn).map(Wwn::new))
+                                    .collect::<Result<Vec<_>, util::Error>>()?,
+                            ))
+                        })
                         .collect::<Result<Vec<_>, util::Error>>()?,
-                );
-                Ok(zone)
+                    raw_zone_configuration.is_effective.unwrap_or(false),
+                ))
             })
             .collect::<Result<Vec<_>, util::Error>>()?;
         Ok(Config {
             initial_setting: InitialSetting {
                 connected_server: connected_servers,
-                zones,
+                zone_configurations: zones,
             },
         })
     }
