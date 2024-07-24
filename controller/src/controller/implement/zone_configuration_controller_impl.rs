@@ -1,10 +1,21 @@
 use std::vec;
 
-use domain::service::interface::zone_configuration_service::ZoneConfigurationService;
-use util::{async_trait, error_handling::AppResult, wwn::format_wwn};
+use domain::{
+    input::{
+        create_zone_configuration_input::CreateZoneConfigurationInput,
+        enable_zone_configuration_input::EnableZoneConfigurationInput,
+        modify_zone_configuration_member_input::ModifyZoneConfigurationMemberInput,
+    },
+    service::interface::zone_configuration_service::ZoneConfigurationService,
+};
+use util::{async_trait, error_handling::AppResult, new, wwn::format_wwn};
 
 use crate::{
     controller::interface::zone_configuratin_controller::ZoneConfigurationController,
+    payload::{
+        create_zone_configuration_payload::CreateZoneConfigurationPayload,
+        update_zone_configuration_member_payload::UpdateZoneConfigurationPayload,
+    },
     response::{
         effective_configuration_response::{
             EffectiveConfigurationResponse, EffectiveConfigurationWrapResponse,
@@ -14,20 +25,12 @@ use crate::{
     },
 };
 
+#[derive(new)]
 pub struct ZoneConfigurationControllerImpl<T>
 where
     T: ZoneConfigurationService,
 {
-    zone_service: T,
-}
-
-impl<T> ZoneConfigurationControllerImpl<T>
-where
-    T: ZoneConfigurationService,
-{
-    pub fn new(zone_service: T) -> Self {
-        Self { zone_service }
-    }
+    zone_configuration_service: T,
 }
 
 #[async_trait]
@@ -39,7 +42,7 @@ where
         &self,
     ) -> AppResult<RestResponse<EffectiveConfigurationWrapResponse>> {
         let effective_configuration_response = self
-            .zone_service
+            .zone_configuration_service
             .effective_configuration()
             .await?
             .map(|output| {
@@ -73,5 +76,40 @@ where
         Ok(RestResponse::new(EffectiveConfigurationWrapResponse::new(
             effective_configuration_response,
         )))
+    }
+
+    async fn update_zone_configuration_member(
+        &self,
+        cfg_name: String,
+        payload: UpdateZoneConfigurationPayload,
+    ) -> AppResult<()> {
+        self.zone_configuration_service
+            .modify_zone_configuration_member(ModifyZoneConfigurationMemberInput::new(
+                cfg_name,
+                payload.member_zone.zone_name,
+            ))
+            .await?;
+        Ok(())
+    }
+
+    async fn enable_zone_configuration(&self, cfg_name: String) -> AppResult<()> {
+        self.zone_configuration_service
+            .enable_zone_configuration(EnableZoneConfigurationInput::new(cfg_name))
+            .await?;
+        Ok(())
+    }
+
+    async fn create_zone_configuration(
+        &self,
+        cfg_name: String,
+        payload: CreateZoneConfigurationPayload,
+    ) -> AppResult<()> {
+        self.zone_configuration_service
+            .create_zone_configuration(CreateZoneConfigurationInput::new(
+                cfg_name,
+                payload.member_zone.zone_name,
+            ))
+            .await?;
+        Ok(())
     }
 }

@@ -1,7 +1,7 @@
 use axum::{extract::Path, http::StatusCode, Json};
 use controller::{
     controller::interface::zone_controller::ZoneController,
-    payload::create_zone_payload::CreateZoneWrapPayload,
+    payload::create_zone_payload::CreateZonePayload,
 };
 use injection::zone_controller;
 use util::error_handling::AppResult;
@@ -11,7 +11,7 @@ pub const DEFINED_CONFIGURATION_ZONE_URL: &str =
 
 pub async fn create_zone_handler(
     Path(zone_name): Path<String>,
-    Json(CreateZoneWrapPayload { zone: payload }): Json<CreateZoneWrapPayload>,
+    Json(payload): Json<CreateZonePayload>,
 ) -> AppResult<(StatusCode, ())> {
     zone_controller().create_zone(zone_name, payload).await?;
     Ok((StatusCode::CREATED, ()))

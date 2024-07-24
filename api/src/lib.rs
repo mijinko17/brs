@@ -7,7 +7,8 @@ use axum_server::tls_rustls::RustlsConfig;
 use handler::{
     create_zone_handler::{create_zone_handler, DEFINED_CONFIGURATION_ZONE_URL},
     defined_configuration_config_handler::{
-        update_zone_configuration_member_handler, DEFINED_CONFIGURATION_CONFIG_URL,
+        create_zone_configuration_handler, update_zone_configuration_member_handler,
+        DEFINED_CONFIGURATION_CONFIG_URL,
     },
     defined_configuration_zone_name_handler::{
         delete_zone_handler, DEFINED_CONFIGURATION_ZONE_NAME_URL,
@@ -52,10 +53,10 @@ pub async fn start() {
             EFFECTIVE_CONFIGURATION_URL,
             get(get_effective_configuration_handler),
         )
-        .route(DEFINED_CONFIGURATION_ZONE_URL, patch(create_zone_handler))
+        .route(DEFINED_CONFIGURATION_ZONE_URL, post(create_zone_handler))
         .route(
             DEFINED_CONFIGURATION_CONFIG_URL,
-            patch(update_zone_configuration_member_handler),
+            post(create_zone_configuration_handler).patch(update_zone_configuration_member_handler),
         )
         .route(
             EFFECTIVE_CONFIGURATION_ACTION_URL,

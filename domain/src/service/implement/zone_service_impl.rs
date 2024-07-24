@@ -62,7 +62,7 @@ where
             .zones()
             .await?
             .into_iter()
-            .map(|zone| ZoneOutput::new(zone.name(), vec![]))
+            .map(|(_, zone)| ZoneOutput::new(zone.name(), vec![]))
             .collect())
     }
     async fn effective_configuration(&self) -> AppResult<ZoneConfigurationOutput> {
@@ -72,7 +72,7 @@ where
                 .zones()
                 .await?
                 .into_iter()
-                .map(|zone| {
+                .map(|(_, zone)| {
                     ZoneOutput::new(
                         zone.name(),
                         zone.members()

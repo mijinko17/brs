@@ -1,4 +1,9 @@
+use util::new;
+
 use super::wwn::Wwn;
+
+#[derive(new)]
+pub struct ZoneIdentifier(pub u32);
 
 #[derive(Clone)]
 pub struct Zone {

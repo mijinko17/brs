@@ -31,7 +31,7 @@
             },
             {
                 "name": "TsukaretaCfg",
-                "isEffective": true,
+                "isEffective": false,
                 "zones": [
                     {
                         "name": "UoooZone",

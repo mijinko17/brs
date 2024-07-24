@@ -1,7 +1,7 @@
 use crate::dao::wwn_dao::WwnDao;
 use crate::dao::zone_dao::{DeleteZoneEntry, ZoneDao};
 use crate::entity::{wwn, zone};
-use domain::entity::zone::Zone;
+use domain::entity::zone::{Zone, ZoneIdentifier};
 use domain::repository::zone_repository::ZoneRepository;
 use sea_orm::ActiveValue::NotSet;
 use sea_orm::Set;
@@ -25,6 +25,7 @@ where
     U: WwnDao + Sync,
 {
     async fn save(&self, zones: Vec<domain::entity::zone::Zone>) -> AppResult<()> {
+        println!("KOKOKOKO");
         for zone in zones {
             let result_zone = self
                 .zone_dao
@@ -64,22 +65,29 @@ where
             .await
     }
 
-    async fn zones(&self) -> AppResult<Vec<domain::entity::zone::Zone>> {
+    async fn zones(&self) -> AppResult<Vec<(ZoneIdentifier, domain::entity::zone::Zone)>> {
         let models = self.zone_dao.zones().await?;
-        Ok(models
-            .into_iter()
-            .map(|(zone, wwns)| {
-                Zone::new(
-                    zone.name,
-                    wwns.into_iter()
-                        .map(|wwn| {
-                            domain::entity::wwn::Wwn::new([
-                                wwn.v0, wwn.v1, wwn.v2, wwn.v3, wwn.v4, wwn.v5, wwn.v6, wwn.v7,
-                            ])
-                        })
-                        .collect(),
-                )
-            })
-            .collect())
+        Ok(models.into_iter().map(convert_model).collect())
     }
+
+    async fn zones_by_name(&self, names: Vec<String>) -> AppResult<Vec<(ZoneIdentifier, Zone)>> {
+        let models = self.zone_dao.zones_by_name(names).await?;
+        Ok(models.into_iter().map(convert_model).collect())
+    }
+}
+
+fn convert_model((zone, wwns): (zone::Model, Vec<wwn::Model>)) -> (ZoneIdentifier, Zone) {
+    (
+        ZoneIdentifier::new(zone.id),
+        Zone::new(
+            zone.name,
+            wwns.into_iter()
+                .map(|wwn| {
+                    domain::entity::wwn::Wwn::new([
+                        wwn.v0, wwn.v1, wwn.v2, wwn.v3, wwn.v4, wwn.v5, wwn.v6, wwn.v7,
+                    ])
+                })
+                .collect(),
+        ),
+    )
 }

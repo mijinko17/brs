@@ -79,7 +79,7 @@ pub fn zone_repository() -> impl ZoneRepository {
 }
 
 pub fn zone_configuration_repository() -> impl ZoneConfigurationRepository {
-    ZoneConfigurationRepositoryImpl::new(zone_configuration_dao())
+    ZoneConfigurationRepositoryImpl::new(zone_configuration_dao(), zone_dao())
 }
 
 pub fn fabric_switch_repository() -> impl FabricSwitchRespistory {
@@ -95,7 +95,7 @@ pub fn zone_service() -> impl ZoneService {
 }
 
 pub fn zone_configuration_service() -> impl ZoneConfigurationService {
-    ZoneConfigurationServiceImpl::new(zone_configuration_repository())
+    ZoneConfigurationServiceImpl::new(zone_configuration_repository(), zone_repository())
 }
 
 pub fn fabric_switch_service() -> impl FabricSwitchService {

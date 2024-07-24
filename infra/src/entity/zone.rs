@@ -8,7 +8,7 @@ pub struct Model {
     #[sea_orm(primary_key)]
     pub id: u32,
     pub name: String,
-    pub cfg_id: Option<i32>,
+    pub cfg_id: Option<u32>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
